@@ -41,6 +41,23 @@ class Entry(object):
             # return true
             return 1
 
+    def return_single_entry(self, current_user, id_entry):
+        cur = self.db.cursor()
+        cur.execute("SELECT * FROM entries")
+        certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
+        entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
+        if len(entries_user) == 0:
+            return {"status":"fail", "message":"entry unavailable"}, 404
+        else:
+            entry_id = entries_user[0][0]
+            title = entries_user[0][1]
+            date_created = entries_user[0][2]
+            description = entries_user[0][3]
+            response = {"status": "success", "entry": {"id":entry_id,
+                                                "title":str(title),
+                                                "description":str(description),
+                                                "created":date_created}}
+
 def token_required(func):
     @wraps(func)
     def decorated(*args, **kwargs):

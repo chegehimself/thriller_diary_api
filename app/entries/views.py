@@ -10,7 +10,7 @@ from app.models import token_required
 from flasgger import Swagger
 from flasgger.utils import swag_from
 # import models
-from app.models import Entry
+from app.models import Entry, User
 ENTRY = Entry()
 
 from app.db import Connection
@@ -18,6 +18,8 @@ from app.db import Connection
 conn = Connection()
 
 db = conn.db_return()
+
+user = User()
 
 # create entries and a single entry Blueprint and
 # version the urls to have '/api/v1' prefix
@@ -67,22 +69,8 @@ def add_new_entry(current_user):
 @swag_from('/docs/get_single.yml')
 def fetch_single_entry(current_user, id_entry):
     """ will return a single entry """
-    cur = db.cursor()
-    cur.execute("SELECT * FROM entries")
-    certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-    entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
-    if len(entries_user) == 0:
-      return {"status":"fail", "message":"entry unavailable"}, 404
-    else:
-        entry_id = entries_user[0][0]
-        title = entries_user[0][1]
-        date_created = entries_user[0][2]
-        description = entries_user[0][3]
-        response = {"status": "success", "entry": {"id":entry_id,
-                                            "title":str(title),
-                                            "description":str(description),
-                                            "created":date_created}}
-        return response, 200
+    response = ENTRY.return_single_entry(current_user, id_entry)
+    return response, 200
 
 @ENT_BP.route('/entries/<int:id_entry>', methods=['PUT'])
 @token_required
