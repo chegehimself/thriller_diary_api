@@ -20,9 +20,6 @@ class Entry(object):
         # all entries placeholder
         self.entries = []
         self.db = conn.db_return()
-        # cur = db.cursor()
-        # cur.execute("CREATE TABLE users (ID serial PRIMARY KEY, username VARCHAR (255) NOT NULL, email VARCHAR (255) NOT NULL, password VARCHAR (255));")
-        # cur.execute("CREATE TABLE entries (ID serial PRIMARY KEY, title VARCHAR (255) NOT NULL, date_created VARCHAR (255) NOT NULL, description VARCHAR (255) NOT NULL, owner_id integer NOT NULL, CONSTRAINT users_id_fkey FOREIGN KEY (id)REFERENCES users (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION);")
     def add_entry(self, title, description, current_user):
         """Adds new entries"""
 
@@ -30,7 +27,7 @@ class Entry(object):
             now = datetime.datetime.now()
             date_created = now.strftime("%Y-%m-%d %H:%M")
             owner_id = current_user
-    
+
             cur = self.db.cursor()
             query =  "INSERT INTO entries (title, date_created, description, owner_id) VALUES (%s, %s, %s, %s)"
             data = (title, date_created, description, owner_id)
@@ -39,7 +36,7 @@ class Entry(object):
             
 
             # return true
-            return 1
+            return True
 
     def return_single_entry(self, current_user, id_entry):
         cur = self.db.cursor()
