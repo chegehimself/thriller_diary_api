@@ -19,6 +19,10 @@ AUTH = Blueprint('authentication', __name__, url_prefix='/api/v1/auth')
 
 from app.db import Connection
 
+from app.models import User
+
+user = User()
+
 conn = Connection()
 
 db = conn.db_return()
@@ -57,20 +61,8 @@ def user_registration():
     # check email validity
     if not re.match(r"(^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-z]+$)", user_email):
         return {"status": "fail", "Message": "Invalid email.Try again"}, 401
-    # check user existense
-    checker = db.cursor()
-    checker.execute("SELECT username, email FROM users")
-    for user in checker.fetchall():
-        if username == user[0]:
-            return {"status": "fail", "message" : "user exists"}, 409
-
-    cur = db.cursor()
-    query =  "INSERT INTO users (email, password, username) VALUES (%s, %s, %s)"
-    hashed_password = generate_password_hash(user_password, method='sha256')
-    data = (user_email, hashed_password, username)
-    cur.execute(query, data)
-    db.commit()
-    # ACCOUNT.register_user(email, password)
+    
+    user.register_user(username, user_email, user_password)
     response = {"status": "success", "Registered": {"Email":str(user_email), "Username":str(username)}}
     return response, 201
 
@@ -88,14 +80,7 @@ def login():
     # check email validity
     if not re.match(r"(^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-z]+$)", user_email):
         return {"status": "fail", "Message": "Invalid email.Try again"}, 401
-    # check user existense
-    checker = db.cursor()
-    checker.execute("SELECT * FROM users")
-    found_user = [user for user in checker.fetchall() if user[2] == user_email]
-    if len(found_user) == 0:
-          return {"status":"fail", "message":"You are not registered"}, 404
-    elif check_password_hash(found_user[0][3], user_password):        
-        token = jwt.encode({'user_id' : found_user[0][0], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=300)}, 'shark')
-        return jsonify({'token' : token.decode('UTF-8')}), 200     
+    elif user_email:
+        user.login_user(user_email, user_password)
     else:
-      return {"status":"fail", "message": "Oops! check your details and try again"}, 401
+        return {"status":"fail", "message": "Oops! check your details and try again"}, 401
