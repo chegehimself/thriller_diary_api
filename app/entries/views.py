@@ -2,22 +2,23 @@
 app/views.py
 contains routes
 """
+from app.db import Connection
 import re
 import psycopg2
 
 from flask import Blueprint, request
+
 from app.models import token_required
-from flasgger import Swagger
+
 from flasgger.utils import swag_from
 # import models
 from app.models import Entry, User
 ENTRY = Entry()
 
-from app.db import Connection
 
-conn = Connection()
+CONN = Connection()
 
-db = conn.db_return()
+db = CONN.db_return()
 
 user = User()
 

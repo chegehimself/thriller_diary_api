@@ -1,14 +1,8 @@
 """
 app/auth/views.py
 """
-import psycopg2
 import re
-from flask import Blueprint, request, jsonify
-from flask_api import FlaskAPI
-from werkzeug.security import generate_password_hash, check_password_hash
-import jwt
-import datetime
-from flasgger import Swagger
+from flask import Blueprint, request
 from flasgger.utils import swag_from
 
 # authentication blueprint
@@ -17,26 +11,19 @@ AUTH = Blueprint('authentication', __name__, url_prefix='/api/v1/auth')
 
 # from app.models import Accounts
 
-from app.db import Connection
-
 from app.models import User
 
-user = User()
-
-conn = Connection()
-
-db = conn.db_return()
+USER = User()
 
 @AUTH.route('/', methods=['GET'])
 @swag_from('/docs/index.yml')
 def index():
     """ root """
     if request.method == 'GET':
-        
         # the following is a welcoming message (at the landing page)
-        welcome_message = {"Message": [{
+        welcome_message = {
             "Welcome":"Hey! welcome to thriller diary api"
-            }]}
+            }
 
         response = {"status": "success", "Message": welcome_message}
         return response, 200
@@ -61,8 +48,7 @@ def user_registration():
     # check email validity
     if not re.match(r"(^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-z]+$)", user_email):
         return {"status": "fail", "Message": "Invalid email.Try again"}, 401
-    
-    user.register_user(username, user_email, user_password)
+    USER.register_user(username, user_email, user_password)
     response = {"status": "success", "Registered": {"Email":str(user_email), "Username":str(username)}}
     return response, 201
 
@@ -81,6 +67,6 @@ def login():
     if not re.match(r"(^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-z]+$)", user_email):
         return {"status": "fail", "Message": "Invalid email.Try again"}, 401
     elif user_email:
-        user.login_user(user_email, user_password)
+        USER.login_user(user_email, user_password)
     else:
         return {"status":"fail", "message": "Oops! check your details and try again"}, 401

@@ -1,6 +1,7 @@
 import psycopg2
 import os
 class Connection(object):
+    """ creates connection to the database """
 
     def __init__(self):
         # ########### OFFICIAL DB CREDENTIALS ##############

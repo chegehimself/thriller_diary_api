@@ -2,16 +2,15 @@
 app/models.py
 contains models for the app
 """
-from werkzeug.security import generate_password_hash, check_password_hash
-import psycopg2
 import datetime
-import jwt
+import psycopg2
 import os
+import jwt
+from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from flask import request, jsonify, current_app, session
+from flask import request, jsonify
 
 from app.db import Connection
-
 conn = Connection()
 class Entry(object):
     """Add new entry"""
@@ -29,16 +28,15 @@ class Entry(object):
             owner_id = current_user
 
             cur = self.db.cursor()
-            query =  "INSERT INTO entries (title, date_created, description, owner_id) VALUES (%s, %s, %s, %s)"
+            query = "INSERT INTO entries (title, date_created, description, owner_id) VALUES (%s, %s, %s, %s)"
             data = (title, date_created, description, owner_id)
             cur.execute(query, data)
             self.db.commit()
-            
-
             # return true
             return True
 
     def return_single_entry(self, current_user, id_entry):
+        """ returns a single entry """
         cur = self.db.cursor()
         cur.execute("SELECT * FROM entries")
         certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
@@ -51,11 +49,12 @@ class Entry(object):
             date_created = entries_user[0][2]
             description = entries_user[0][3]
             response = {"status": "success", "entry": {"id":entry_id,
-                                                "title":str(title),
-                                                "description":str(description),
-                                                "created":date_created}}
+                                                       "title":str(title),
+                                                       "description":str(description),
+                                                       "created":date_created}}
 
     def edit_entry(self, current_user, id_entry, description, title):
+        """  edits an entry   """
         cur = self.db.cursor()
         cur.execute("SELECT * FROM entries")
         certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
@@ -73,6 +72,7 @@ class Entry(object):
                 "entry": {"Message":"Updated successfully"}}
 
     def delete_an_entry(self, current_user, id_entry):
+        """ deletes an entry """
         cur = self.db.cursor()
         cur.execute("SELECT * FROM entries")
         certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
@@ -89,12 +89,12 @@ class Entry(object):
         response, 200
 
 def token_required(func):
+    """ decorated function for toke required """
     @wraps(func)
     def decorated(*args, **kwargs):
         token = None
         if not 'access-token' in request.headers:
             return jsonify({"status":"fail", 'message' : 'Please provide a token'}), 401
-        
         if 'access-token' in request.headers:
             token = request.headers['access-token']
         try:
@@ -108,9 +108,10 @@ def token_required(func):
     return decorated
 
 class User(object): 
-    # check user existense
+    """ Handle user """
 
     def register_user(self, username, user_email, user_password):
+        """ registers a  new user"""
         self.db = conn.db_return()
         checker = self.db.cursor()
         checker.execute("SELECT username, email FROM users")
@@ -119,13 +120,14 @@ class User(object):
                 return {"status": "fail", "message" : "user exists"}, 409
 
         cur = self.db.cursor()
-        query =  "INSERT INTO users (email, password, username) VALUES (%s, %s, %s)"
+        query = "INSERT INTO users (email, password, username) VALUES (%s, %s, %s)"
         hashed_password = generate_password_hash(user_password, method='sha256')
         data = (user_email, hashed_password, username)
         cur.execute(query, data)
         self.db.commit()
 
     def login_user(self, user_email, user_password):
+        """ Logs in an existing user """
          # check user existense
         checker = self.db.cursor()
         checker.execute("SELECT * FROM users")
