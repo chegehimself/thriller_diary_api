@@ -58,6 +58,39 @@ class Entry(object):
                                                 "description":str(description),
                                                 "created":date_created}}
 
+    def edit_entry(self, current_user, id_entry, description, title):
+        cur = self.db.cursor()
+        cur.execute("SELECT * FROM entries")
+        certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
+        entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
+        if len(entries_user) == 0:
+            return {"status":"fail", "message":"entry not found"}, 404
+        for entry in certain_user_entries:
+            # update the entry
+            query = "UPDATE entries SET description=(%s), title=(%s) WHERE id = (%s)"
+            data = (description, title, id_entry)
+            cur.execute(query, data)
+            self.db.commit()
+            response = {
+                "status": "success",
+                "entry": {"Message":"Updated successfully"}}
+
+    def delete_an_entry(self, current_user, id_entry):
+        cur = self.db.cursor()
+        cur.execute("SELECT * FROM entries")
+        certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
+        entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
+        if len(entries_user) == 0:
+            return {"status":"fail", "message":"entry not found"}, 404
+        query = "DELETE from entries WHERE entries.id = (%s)"
+        cur.execute(query, [id_entry])
+        self.db.commit()
+        response = {
+            "status":"success",
+            "Deleted":{"id":id_entry}
+        }
+        response, 200
+
 def token_required(func):
     @wraps(func)
     def decorated(*args, **kwargs):
