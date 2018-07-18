@@ -145,23 +145,3 @@ def update_single_entry(current_user, id_entry):
             "status": "success",
             "entry": {"Message":"Updated successfully"}}
         return response, 201
-
-@ENT_BP.route('/entries/<int:entry_id>', methods=['DELETE'])
-@token_required
-def delete_entry(entry_id):
-    """ To delete a certain entry """
-    # if there are no entries there is no need to do anything
-    if not ENTRIES:
-        return {"status": "Fail", "entry": {"Error":"That entry does not exist!"}}, 404
-    for i, entry in  enumerate(ENTRIES):
-        # check if the entry exists
-        if entry['id'] == int(entry_id):
-            title = entry['title']
-            description = entry['description']
-            date_created = entry['created']
-            ENTRIES.pop(i)
-            response = {"status": "success",
-                        "Deleted": {"title":str(title),
-                                    "description":str(description),
-                                    "created":date_created}}
-            return response, 200
