@@ -97,8 +97,8 @@ def fetch_single_entry(current_user, id_entry):
         # check if the entry exists and return
         if entry[0] == id_entry:
             title = entry[1]
-            description = entry[2]
-            date_created = entry[3]
+            description = entry[3]
+            date_created = entry[2]
             entry_id = entry[0]
             response = {
                 "status": "success", "entry": {"id":entry_id,
@@ -110,38 +110,41 @@ def fetch_single_entry(current_user, id_entry):
 
 @ENT_BP.route('/entries/<int:id_entry>', methods=['PUT'])
 @token_required
-def update_single_entry(id_entry):
+def update_single_entry(current_user, id_entry):
     """ Edits a single entry """
     # if there are no entries there is no need to do anything
-    if not ENTRIES:
-        return {"status": "Fail", "entry": {"Error":"That entry does not exist!"}}, 404
-    for entry in ENTRIES:
-        # check if the entry exists
-        if entry['id'] == id_entry:
-            title = str(request.data.get('title', '')).strip()
-            description = str(request.data.get('description', ''))
-            # check for empty title
-            if not title:
-                response = {"message": "Please input title", "status": 401}
-                return response, 401
-            # check for empty description
-            if not description:
-                response = {"message": "Please input description", "status": 401}
-                return response, 401
-            # check for special characters in title
-            if not re.match(r"^[a-zA-Z0-9_ -]*$", title):
-                response = {"message": "Please input valid title", "status": 401}
-                return response, 401
-            entry['title'] = title
-            entry['description'] = description
-            date_created = entry['created']
-
-            response = {
-                "status": "success",
-                "entry": {"title":str(title),
-                          "description":str(description),
-                          "created":date_created}}
-            return response, 201
+    # if not ENTRIES:
+    #     return {"status": "Fail", "entry": {"Error":"That entry does not exist!"}}, 404
+    # for entry in ENTRIES:
+    #     # check if the entry exists
+    #     if entry['id'] == id_entry:
+    title = str(request.data.get('title', '')).strip()
+    description = str(request.data.get('description', ''))
+    # check for empty title
+    if not title:
+        response = {"message": "Please input title", "status": 401}
+        return response, 401
+    # check for empty description
+    if not description:
+        response = {"message": "Please input description", "status": 401}
+        return response, 401
+    # check for special characters in title
+    if not re.match(r"^[a-zA-Z0-9_ -]*$", title):
+        response = {"message": "Please input valid title", "status": 401}
+        return response, 401   
+    cur = db.cursor()
+    cur.execute("SELECT * FROM entries")
+    certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
+    for entry in certain_user_entries:
+        # update the entry
+        query = "UPDATE entries SET description=(%s), title=(%s) WHERE id = (%s)"
+        data = (description, title, id_entry)
+        cur.execute(query, data)
+        db.commit()
+        response = {
+            "status": "success",
+            "entry": {"Message":"Updated successfully"}}
+        return response, 201
 
 @ENT_BP.route('/entries/<int:entry_id>', methods=['DELETE'])
 @token_required
