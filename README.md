@@ -68,6 +68,7 @@ The following is a list of available endpoints in this application
 |GET api/v1/entries |fetch all entries|
 |GET api/v1/entries/<int:entryId> |fetch a single entry|
 |POST api/v1/entries |Add an entry|
+|PUT api/v1/entries/<int:entryId> |modify an entry|
 
 # Testing
 * coming soon
