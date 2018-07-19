@@ -3,7 +3,7 @@
 # status
 * coming soon ...
 
-# Local Installation
+
 ### Local Installation
 
 Fork this repository to your github account and clone from there(_NB: clone from your github account - after forking_).This will help you to contribute to this project.
@@ -64,7 +64,9 @@ The following is a list of available endpoints in this application
 |EndPoint               | Functionality|
 | ------------------------------------ | ------------------------ |
 |POST api/v1/auth/signup    |Register a user|
-|POST api/v1/auth/login |Login a user
+|POST api/v1/auth/login |Login a user|
+|GET api/v1/entries |fetch all entries|
+|GET api/v1/entries/<int:entryId> |fetch a single entry|
 |POST api/v1/entries |Add an entry|
 
 # Testing
