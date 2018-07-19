@@ -52,11 +52,10 @@ def test():
 def get_all_entries(current_user):
     """Retrives all Entries"""
     if request.method == 'GET':
-        # if there is nothing yet
         cur = db.cursor()
-        cur.execute("SELECT id date_created, title, description, owner_id FROM entries")
-        # for username, email in cur.fetchall():
-        response = {"status": "success", "all": cur.fetchall()}
+        cur.execute("SELECT * FROM entries")
+        certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
+        response = {"status": "success", "Entries": certain_user_entries}
         return response, 200
 
 @ENTRIES_BP.route('/entries', methods=['POST'])
