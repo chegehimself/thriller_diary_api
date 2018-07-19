@@ -85,18 +85,21 @@ def add_new_entry(current_user):
 
 @ENT_BP.route('/entries/<int:id_entry>', methods=['GET'])
 @token_required
-def fetch_single_entry(id_entry):
+def fetch_single_entry(current_user, id_entry):
     """ will return a single entry """
     # if there are no entries there is no need to do anything
-    if not ENTRIES:
-        return {"status": "Fail", "entry": {"Error":"That entry does not exist!"}}, 404
-    for entry in ENTRIES:
+    # if not ENTRIES:
+    #     return {"status": "Fail", "entry": {"Error":"That entry does not exist!"}}, 404
+    cur = db.cursor()
+    cur.execute("SELECT * FROM entries")
+    certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
+    for entry in certain_user_entries:
         # check if the entry exists and return
-        if entry['id'] == id_entry:
-            title = entry['title']
-            description = entry['description']
-            date_created = entry['created']
-            entry_id = entry['id']
+        if entry[0] == id_entry:
+            title = entry[1]
+            description = entry[2]
+            date_created = entry[3]
+            entry_id = entry[0]
             response = {
                 "status": "success", "entry": {"id":entry_id,
                                                "title":str(title),
