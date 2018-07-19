@@ -22,7 +22,7 @@ __Set environment variable__
 # setup Database
 * make sure you have [__postgresql__](https://www.postgresql.org/download/linux/ubuntu/) installed and running properly.
 
-* open the terminal and type the following commands to create the database and the users table
+* open the terminal and type the following commands to create the database and the required tables
 
 ```
 - psql -U postgres
