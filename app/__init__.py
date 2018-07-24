@@ -1,10 +1,13 @@
+"""app/__init__.py - This file creates and initializes the app"""
+
 import os
 from flask import request, jsonify
 from flask_api import FlaskAPI
 from flask_cors import CORS
 # local import
 from instance.config import APP_CONFIG
-from . auth.views import AUTH
+from app.models import Entry
+from . entries.views import ENTRIES_BP, ENT_BP
 
 def create_app(config_name):
     """ creates the app with the desired environment """
@@ -18,7 +21,8 @@ def create_app(config_name):
     # fix not found error(testing)
     app.url_map.strict_slashes = False
     # register the blueprints
-    app.register_blueprint(AUTH)
+    app.register_blueprint(ENTRIES_BP)
+    app.register_blueprint(ENT_BP)
 
     # For the following functions pylint has been disabled only on variables and arguements
     # It is Not necessary to use the variables or the argument

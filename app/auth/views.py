@@ -1,13 +1,13 @@
 """
 app/auth/views.py
 """
-
-from flask import Blueprint, request
+import re
+from flask import Blueprint, request, make_response, jsonify
 from flask_api import FlaskAPI
 
 # authentication blueprint
 
-AUTH = Blueprint('authentication', __name__, url_prefix='/api/v1')
+AUTH = Blueprint('authentication', __name__, url_prefix='/api/v1/auth')
 
 
 @AUTH.route('/', methods=['GET'])
@@ -22,3 +22,14 @@ def index():
 
         response = {"status": "success", "Message": welcome_message}
         return response, 200
+
+@AUTH.route('/register', methods = ['GET'])
+def register():
+    """ to register users """
+    username = str(request.data.get('username', '')).strip()
+    password = str(request.data.get('password', ''))
+    email = str(request.data.get('email'), '')
+
+    if username and password and email:
+        return "ok data is fine", 200
+    return "oops", 401

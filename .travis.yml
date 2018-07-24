@@ -1,0 +1,19 @@
+# .travis.yml 
+
+# for auto testing
+
+language: python
+python:
+  - "3.5"
+# dependencies installation
+install:
+  - pip install -r requirements.txt
+# add environment variable
+before_script:
+  - export APP_SETTINGS="development"
+# start test
+script:
+  - py.test --cov=app
+# send info to coveralls
+after_success:
+   coveralls
