@@ -23,7 +23,7 @@ def index():
         response = {"status": "success", "Message": welcome_message}
         return response, 200
 
-@AUTH.route('/register', methods = ['GET'])
+@AUTH.route('/register', methods = ['POST'])
 def register():
     """ to register users """
     username = str(request.data.get('username', '')).strip()
