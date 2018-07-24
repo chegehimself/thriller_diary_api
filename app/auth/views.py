@@ -45,8 +45,16 @@ def user_registration():
     user_email = request.data.get('email', '')
     user_password = request.data.get('password', '')
     username = request.data.get('username', '')
-
+    # check for empty input
+    if not user_email or not user_password or not username:
+        return {"status": "fail", "Message": "Check your details and try again"}, 401
     # check user existense
+    checker = db.cursor()
+    checker.execute("SELECT username, email FROM users")
+    for user in checker.fetchall():
+        if username == user[0]:
+            return {"status": "fail", "message" : "user exists"}, 409
+
     cur = db.cursor()
     query =  "INSERT INTO users (email, password, username) VALUES (%s, %s, %s)"
     data = (user_email, user_password, username)
