@@ -5,6 +5,7 @@ import psycopg2
 import re
 from flask import Blueprint, request, make_response, jsonify
 from flask_api import FlaskAPI
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # authentication blueprint
 
@@ -34,7 +35,7 @@ def index():
 @AUTH.route('/test', methods=['GET'])
 def test():
     cur = db.cursor()
-    cur.execute("SELECT username, email FROM users")
+    cur.execute("SELECT username, email, password FROM users")
     # for username, email in cur.fetchall():
 
     response = {"status": "success", "all": cur.fetchall()}
@@ -45,6 +46,7 @@ def user_registration():
     user_email = request.data.get('email', '')
     user_password = request.data.get('password', '')
     username = request.data.get('username', '')
+
     # check for empty input
     if not user_email or not user_password or not username:
         return {"status": "fail", "Message": "Check your details and try again"}, 401
@@ -67,7 +69,8 @@ def user_registration():
 
     cur = db.cursor()
     query =  "INSERT INTO users (email, password, username) VALUES (%s, %s, %s)"
-    data = (user_email, user_password, username)
+    hashed_password = generate_password_hash(user_password, method='sha256')
+    data = (user_email, hashed_password, username)
     cur.execute(query, data)
     db.commit()
     # ACCOUNT.register_user(email, password)
@@ -79,16 +82,18 @@ def user_registration():
 #     response = {"status": "success", "users": ACCOUNT.all_users()}
 #     return response, 200
 
-# @AUTH.route('/login', methods=['POST'])
-# def login():
-#     email = str(request.data.get('email', '')).strip()
-#     password = str(request.data.get('password', ''))
-#     if not ACCOUNT.all_users():
-#         return  {"status": "Fail", "message": "Such a user doesnot exist"}
-#     for user in ACCOUNT.all_users():
-#         if user['email'] == email and user['password'] == password:
-#             response =  {"status": "success", "message": "Login successful"}
-#             return response, 200
-#         response =  {"status": "Fail", "message": "Check credentials and try again"}
-#         return response, 401
-        
+@AUTH.route('/login', methods=['POST'])
+def login():
+    user_email = request.data.get('email', '')
+    user_password = request.data.get('password', '')
+    # check if the submited data
+    if not user_email or not user_password:
+        return {"status": "fail", "Message": "Check your details and try again"}, 401
+    # check user existense
+    checker = db.cursor()
+    checker.execute("SELECT username, email, password FROM users")
+    for user in checker.fetchall():
+        if user_email == user[1]:
+            if check_password_hash(user[2], user_password):
+                return {"status": "success", "Message": "Login successful"}, 200
+            return {"status":"fail", "message":"Oops! check your details and try again"}, 401
