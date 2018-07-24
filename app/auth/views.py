@@ -38,3 +38,16 @@ def user_registration():
 #     response = {"status": "success", "users": ACCOUNT.all_users()}
 #     return response, 200
 
+@AUTH.route('/login', methods=['POST'])
+def login():
+    email = str(request.data.get('email', '')).strip()
+    password = str(request.data.get('password', ''))
+    if not ACCOUNT.all_users():
+        return  {"status": "Fail", "message": "Such a user doesnot exist"}
+    for user in ACCOUNT.all_users():
+        if user['email'] == email and user['password'] == password:
+            response =  {"status": "success", "message": "Login successful"}
+            return response, 200
+        response =  {"status": "Fail", "message": "Check credentials and try again"}
+        return response, 401
+        
