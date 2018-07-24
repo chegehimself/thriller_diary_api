@@ -8,6 +8,7 @@ from flask_cors import CORS
 from instance.config import APP_CONFIG
 from app.models import Entry
 from . entries.views import ENTRIES_BP, ENT_BP
+from . auth.views import AUTH
 
 def create_app(config_name):
     """ creates the app with the desired environment """
@@ -23,6 +24,7 @@ def create_app(config_name):
     # register the blueprints
     app.register_blueprint(ENTRIES_BP)
     app.register_blueprint(ENT_BP)
+    app.register_blueprint(AUTH)
 
     # For the following functions pylint has been disabled only on variables and arguements
     # It is Not necessary to use the variables or the argument

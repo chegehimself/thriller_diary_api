@@ -26,10 +26,11 @@ def index():
 @AUTH.route('/register', methods = ['POST'])
 def register():
     """ to register users """
-    username = str(request.data.get('username', '')).strip()
-    password = str(request.data.get('password', ''))
-    email = str(request.data.get('email'), '')
-
-    if username and password and email:
+    json_data = request.data
+    username = json_data['username'].strip()
+    email = json_data['email'].strip()
+    password = json_data['password'].strip()
+    
+    if email and password and username:
         return "ok data is fine", 200
     return "oops", 401
