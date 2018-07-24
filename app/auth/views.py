@@ -48,6 +48,10 @@ def user_registration():
     # check for empty input
     if not user_email or not user_password or not username:
         return {"status": "fail", "Message": "Check your details and try again"}, 401
+    # check username
+    the_username = username.lower()
+    if not re.match(r"^[a-z0-9_]*$", the_username):
+        return {"status": "fail", "Message": "Invalid usernamee.Try again"}, 401
     # check user existense
     checker = db.cursor()
     checker.execute("SELECT username, email FROM users")
