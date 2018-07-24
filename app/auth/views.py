@@ -52,6 +52,12 @@ def user_registration():
     the_username = username.lower()
     if not re.match(r"^[a-z0-9_]*$", the_username):
         return {"status": "fail", "Message": "Invalid usernamee.Try again"}, 401
+    # check password length
+    if len(user_password) < 4:
+        return {"status": "fail", "Message": "Too short password(at least 4 characters needed)"}, 401
+    # check email validity
+    if not re.match(r"(^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-z]+$)", user_email):
+        return {"status": "fail", "Message": "Invalid email.Try again"}, 401
     # check user existense
     checker = db.cursor()
     checker.execute("SELECT username, email FROM users")
