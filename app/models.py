@@ -42,3 +42,24 @@ class Entry(object):
 
         return self.entries
         
+
+class Accounts(object):
+    """ Register and login users """
+
+    def __init__(self):
+        self.users = []
+
+    def register_user(self, email, password):
+        user_placeholder = {}
+        user_placeholder['email'] = email
+        user_placeholder['password'] = password
+        self.users.append(user_placeholder)
+
+    def all_users(self):
+        return self.users
+
+    def login(self, email, password):
+        for user in self.users:
+            if (user['email'] == email and user['password'] == password):
+                return True
+            return False

@@ -13,9 +13,9 @@ class TestDiaryEntry(unittest.TestCase):
     def setUp(self):
         self.app = create_app(config_name="testing")
         self.client = self.app.test_client
-        self.user = {'username':'superman', 'email':'superman@gmail.com', 'passowrd':"69mansuper"}
-        self.register_route = 'api/v1/auth/register'
+        self.user = {"username":"superman", "email":"superman@gmail.com", "passowrd":"69mansuper"}
+        self.register_route = 'api/v1/auth/signup'
 
     def test_registration(self):
         req = self.client().post(self.register_route, data=self.user) # pylint: disable=unused-variable
-        self.assertEqual(req.status_code, 200)
+        self.assertEqual(req.status_code, 201)
