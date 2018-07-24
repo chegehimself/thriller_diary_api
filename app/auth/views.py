@@ -1,6 +1,7 @@
 """
 app/auth/views.py
 """
+import psycopg2
 import re
 from flask import Blueprint, request, make_response, jsonify
 from flask_api import FlaskAPI
@@ -9,8 +10,14 @@ from flask_api import FlaskAPI
 
 AUTH = Blueprint('authentication', __name__, url_prefix='/api/v1/auth')
 
-from app.models import Accounts
-ACCOUNT = Accounts()
+# from app.models import Accounts
+
+# ACCOUNT = Accounts()
+HOSTNAME = 'localhost'
+USERNAME = 'postgres'
+PASSWORD = '2grateful'
+DATABASE = 'thriller'
+db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)
 
 @AUTH.route('/', methods=['GET'])
 def index():
@@ -24,13 +31,27 @@ def index():
 
         response = {"status": "success", "Message": welcome_message}
         return response, 200
+@AUTH.route('/test', methods=['GET'])
+def test():
+    cur = db.cursor()
+    cur.execute("SELECT username, email FROM thriller")
+    # for username, email in cur.fetchall():
+
+    response = {"status": "success", "all": cur.fetchall()}
+    return response, 200
 
 @AUTH.route('/signup', methods=['POST'])
 def user_registration():
-    email = str(request.data.get('email', '')).strip()
-    password = str(request.data.get('password', ''))
-    ACCOUNT.register_user(email, password)
-    response = {"status": "success", "Registered": {"Email":str(email), "Password":str(password)}}
+    user_email = request.data.get('email', '')
+    user_password = request.data.get('password', '')
+    username = request.data.get('username', '')
+    cur = db.cursor()
+    query =  "INSERT INTO thriller (email, password, username) VALUES (%s, %s, %s)"
+    data = (user_email, user_password, username)
+    cur.execute(query, data)
+    db.commit()
+    # ACCOUNT.register_user(email, password)
+    response = {"status": "success", "Registered": {"Email":str(user_email), "Username":str(username), "Password":str(user_password)}}
     return response, 201
 
 # @AUTH.route('/users', methods=['GET'])
@@ -38,16 +59,16 @@ def user_registration():
 #     response = {"status": "success", "users": ACCOUNT.all_users()}
 #     return response, 200
 
-@AUTH.route('/login', methods=['POST'])
-def login():
-    email = str(request.data.get('email', '')).strip()
-    password = str(request.data.get('password', ''))
-    if not ACCOUNT.all_users():
-        return  {"status": "Fail", "message": "Such a user doesnot exist"}
-    for user in ACCOUNT.all_users():
-        if user['email'] == email and user['password'] == password:
-            response =  {"status": "success", "message": "Login successful"}
-            return response, 200
-        response =  {"status": "Fail", "message": "Check credentials and try again"}
-        return response, 401
+# @AUTH.route('/login', methods=['POST'])
+# def login():
+#     email = str(request.data.get('email', '')).strip()
+#     password = str(request.data.get('password', ''))
+#     if not ACCOUNT.all_users():
+#         return  {"status": "Fail", "message": "Such a user doesnot exist"}
+#     for user in ACCOUNT.all_users():
+#         if user['email'] == email and user['password'] == password:
+#             response =  {"status": "success", "message": "Login successful"}
+#             return response, 200
+#         response =  {"status": "Fail", "message": "Check credentials and try again"}
+#         return response, 401
         
