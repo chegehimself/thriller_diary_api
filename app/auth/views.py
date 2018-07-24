@@ -34,7 +34,7 @@ def index():
 @AUTH.route('/test', methods=['GET'])
 def test():
     cur = db.cursor()
-    cur.execute("SELECT username, email FROM thriller")
+    cur.execute("SELECT username, email FROM users")
     # for username, email in cur.fetchall():
 
     response = {"status": "success", "all": cur.fetchall()}
@@ -45,8 +45,10 @@ def user_registration():
     user_email = request.data.get('email', '')
     user_password = request.data.get('password', '')
     username = request.data.get('username', '')
+
+    # check user existense
     cur = db.cursor()
-    query =  "INSERT INTO thriller (email, password, username) VALUES (%s, %s, %s)"
+    query =  "INSERT INTO users (email, password, username) VALUES (%s, %s, %s)"
     data = (user_email, user_password, username)
     cur.execute(query, data)
     db.commit()
