@@ -8,7 +8,7 @@
 import unittest
 from app import create_app
 
-class TestDiaryEntry(unittest.TestCase):
+class TestAuth(unittest.TestCase):
     """test for successful and unsuccessful entry addition"""
     def setUp(self):
         self.app = create_app(config_name="testing")
