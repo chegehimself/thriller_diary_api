@@ -97,6 +97,7 @@ def login():
     for user in checker.fetchall():
         if user_email == user[2]:
             if check_password_hash(user[3], user_password):
+                
                 token = jwt.encode({'user_id' : user[0], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, 'shark')
                 return jsonify({'token' : token.decode('UTF-8')})
                 # session["pulic_id"] = user[0]

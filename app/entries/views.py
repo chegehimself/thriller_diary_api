@@ -80,7 +80,7 @@ def add_new_entry(current_user):
         return response, 401
     # title = json_data['title']
     # description = json_data['description']
-    ENTRY.add_entry(title, description)
+    ENTRY.add_entry(title, description, current_user)
     response = {"status": "success", "entry": {"title":str(title), "description":str(description)}}
     return response, 201
 
