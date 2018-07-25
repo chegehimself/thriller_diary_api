@@ -43,4 +43,6 @@ pygresql
 
 nose
 
+flask_jwt
+
 jwt
