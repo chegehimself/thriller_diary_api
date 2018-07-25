@@ -17,8 +17,13 @@ class Entry(object):
     def __init__(self):
         # all entries placeholder
         self.entries = []
+        HOSTNAME = 'localhost'
+        USERNAME = 'postgres'
+        PASSWORD = '2grateful'
+        DATABASE = 'thriller'
+        self.db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)
 
-    def add_entry(self, title, description):
+    def add_entry(self, title, description, current_user):
         """Adds new entries"""
 
         if description and title:
@@ -31,12 +36,19 @@ class Entry(object):
                 entry_id += 1
                 if i['id'] == entry_id:
                     entry_id += 1
-            single_entry_holder = dict()
-            single_entry_holder['id'] = entry_id
-            single_entry_holder['title'] = title
-            single_entry_holder['description'] = description
-            single_entry_holder['created'] = str(date_created)
-            self.entries.append(single_entry_holder)
+            # single_entry_holder = dict()
+            # single_entry_holder['id'] = entry_id
+            # single_entry_holder['title'] = title
+            # single_entry_holder['description'] = description
+            # single_entry_holder['created'] = str(date_created)
+            # self.entries.append(single_entry_holder)
+            owner_id = current_user
+            cur = self.db.cursor()
+            query =  "INSERT INTO entries (title, date_created, description, owner_id) VALUES (%s, %s, %s, %s)"
+            data = (title, date_created, description, owner_id)
+            cur.execute(query, data)
+            self.db.commit()
+
             # return true
             return 1
 
@@ -50,7 +62,9 @@ class Entry(object):
         return self.entries
 
 class User:
+    """ returns available users """
     def all_the_users(self):
+        """Returns all users in databse """
         HOSTNAME = 'localhost'
         USERNAME = 'postgres'
         PASSWORD = '2grateful'
