@@ -3,10 +3,12 @@ app/auth/views.py
 """
 import psycopg2
 import re
-from flask import Blueprint, request, make_response, jsonify
+from flask import Blueprint, request, make_response, jsonify, session
 from flask_api import FlaskAPI
 from werkzeug.security import generate_password_hash, check_password_hash
-
+import jwt
+import datetime
+import os
 # authentication blueprint
 
 AUTH = Blueprint('authentication', __name__, url_prefix='/api/v1/auth')
@@ -35,7 +37,7 @@ def index():
 @AUTH.route('/test', methods=['GET'])
 def test():
     cur = db.cursor()
-    cur.execute("SELECT username, email, password FROM users")
+    cur.execute("SELECT id, username, email, password FROM users")
     # for username, email in cur.fetchall():
 
     response = {"status": "success", "all": cur.fetchall()}
@@ -74,7 +76,7 @@ def user_registration():
     cur.execute(query, data)
     db.commit()
     # ACCOUNT.register_user(email, password)
-    response = {"status": "success", "Registered": {"Email":str(user_email), "Username":str(username), "Password":str(user_password)}}
+    response = {"status": "success", "Registered": {"Email":str(user_email), "Username":str(username)}}
     return response, 201
 
 # @AUTH.route('/users', methods=['GET'])
@@ -91,10 +93,12 @@ def login():
         return {"status": "fail", "Message": "Check your details and try again"}, 401
     # check user existense
     checker = db.cursor()
-    checker.execute("SELECT username, email, password FROM users")
+    checker.execute("SELECT id, username, email, password FROM users")
     for user in checker.fetchall():
-        if user_email == user[1]:
-            if check_password_hash(user[2], user_password):
-                return {"status": "success", "Message": "Login successful"}, 200
+        if user_email == user[2]:
+            if check_password_hash(user[3], user_password):
+                token = jwt.encode({'user_id' : user[0], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, 'shark')
+                return jsonify({'token' : token.decode('UTF-8')})
+                # session["pulic_id"] = user[0]
+                # return {"status": "success", "Message": "Login successful"}, 200
             return {"status":"fail", "message":"Oops! check your details and try again"}, 401
-

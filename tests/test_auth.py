@@ -20,7 +20,8 @@ class TestAuth(unittest.TestCase):
 
     def test_registration_conflict(self):
         req = self.client().post(self.register_route, data=self.user) # pylint: disable=unused-variable
-        self.assertEqual(req.status_code, 409)
+        req1 = self.client().post(self.register_route, data=self.user) # pylint: disable=unused-variable
+        self.assertEqual(req1.status_code, 409)
     
     def test_registration_success(self):
         self.register = {"username":"spinder", "password":"spinder", "email":"spinder@gmail.com"}
