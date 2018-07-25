@@ -62,6 +62,7 @@ The following is a list of available endpoints in this application
 | ------------------------------------ | ------------------------ |
 |POST api/v1/auth/signup    |Register a user|
 |POST api/v1/auth/login |Login a user
+|POST /entries |Add an entry|
 
 # Testing
 * coming soon
