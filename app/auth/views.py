@@ -84,8 +84,8 @@ def user_registration():
 
 @AUTH.route('/login', methods=['POST'])
 def login():
-    user_email = request.data.get('email', '')
-    user_password = request.data.get('password', '')
+    user_email = str(request.data.get('email', '').strip())
+    user_password = str(request.data.get('password', '').strip())
     # check if the submited data
     if not user_email or not user_password:
         return {"status": "fail", "Message": "Check your details and try again"}, 401
@@ -97,3 +97,4 @@ def login():
             if check_password_hash(user[2], user_password):
                 return {"status": "success", "Message": "Login successful"}, 200
             return {"status":"fail", "message":"Oops! check your details and try again"}, 401
+

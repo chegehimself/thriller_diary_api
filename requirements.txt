@@ -36,3 +36,7 @@ flask-cors
 
 # for test coverage
 pytest-cov
+
+psycopg2
+
+pygresql
