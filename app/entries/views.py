@@ -3,11 +3,19 @@ app/views.py
 contains routes
 """
 import re
+import psycopg2
 
 from flask import Blueprint, request
+from app.models import token_required
 # import models
 from app.models import Entry
 ENTRY = Entry()
+
+HOSTNAME = 'localhost'
+USERNAME = 'postgres'
+PASSWORD = '2grateful'
+DATABASE = 'thriller'
+db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)
 
 # call all available entries
 ENTRIES = ENTRY.all_entries()
@@ -31,20 +39,29 @@ def index():
 
         response = {"status": "success", "Message": welcome_message}
         return response, 200
+@ENTRIES_BP.route('/test', methods=['GET'])
+def test():
+    cur = db.cursor()
+    cur.execute("SELECT id date_created, title, description, owner_id FROM entries")
+    # for username, email in cur.fetchall():
+    response = {"status": "success", "all": cur.fetchall()}
+    return response, 200
 
 @ENTRIES_BP.route('/entries', methods=['GET'])
-def get_all_entries():
+@token_required
+def get_all_entries(current_user):
     """Retrives all Entries"""
     if request.method == 'GET':
         # if there is nothing yet
-        if not ENTRIES:
-            response = {"status": "success", "entries": "There are no entries for now"}
-            return response, 200
-        response = {"status": "success", "entries": ENTRIES}
+        cur = db.cursor()
+        cur.execute("SELECT id date_created, title, description, owner_id FROM entries")
+        # for username, email in cur.fetchall():
+        response = {"status": "success", "all": cur.fetchall()}
         return response, 200
 
 @ENTRIES_BP.route('/entries', methods=['POST'])
-def add_new_entry():
+@token_required
+def add_new_entry(current_user):
     """Add an entry"""
     # json_data = request.get_json()
     title = str(request.data.get('title', '')).strip()
@@ -68,6 +85,7 @@ def add_new_entry():
     return response, 201
 
 @ENT_BP.route('/entries/<int:id_entry>', methods=['GET'])
+@token_required
 def fetch_single_entry(id_entry):
     """ will return a single entry """
     # if there are no entries there is no need to do anything
@@ -89,6 +107,7 @@ def fetch_single_entry(id_entry):
             return response, 200
 
 @ENT_BP.route('/entries/<int:id_entry>', methods=['PUT'])
+@token_required
 def update_single_entry(id_entry):
     """ Edits a single entry """
     # if there are no entries there is no need to do anything
@@ -123,6 +142,7 @@ def update_single_entry(id_entry):
             return response, 201
 
 @ENT_BP.route('/entries/<int:entry_id>', methods=['DELETE'])
+@token_required
 def delete_entry(entry_id):
     """ To delete a certain entry """
     # if there are no entries there is no need to do anything

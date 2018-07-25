@@ -38,7 +38,15 @@ __Set environment variable__
   password VARCHAR (255)
   );
 
+CREATE TABLE entry (
+  ID serial PRIMARY KEY,
+  title VARCHAR (255) NOT NULL,
+  date_created VARCHAR (255) NOT NULL,
+  description VARCHAR (255) NOT NULL,
+  owner_id INTEGER NOT NULL
+  );
   ```
+
 
 __Start Server__
 ```py

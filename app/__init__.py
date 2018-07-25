@@ -17,6 +17,9 @@ def create_app(config_name):
     # app settings config
     app.config.from_object(APP_CONFIG[config_name])
     app.config.from_pyfile('config.py')
+
+    # secret key
+    app.config['SECRET_KEY'] = '@dinoIs@PandasNot@Shark'
     # for cross origin resource sharing
     CORS(app)
     # fix not found error(testing)

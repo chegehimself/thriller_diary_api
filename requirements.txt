@@ -40,3 +40,7 @@ pytest-cov
 psycopg2
 
 pygresql
+
+nose
+
+jwt
