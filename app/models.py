@@ -43,11 +43,14 @@ class Entry(object):
             # single_entry_holder['created'] = str(date_created)
             # self.entries.append(single_entry_holder)
             owner_id = current_user
-            cur = self.db.cursor()
-            query =  "INSERT INTO entries (title, date_created, description, owner_id) VALUES (%s, %s, %s, %s)"
-            data = (title, date_created, description, owner_id)
-            cur.execute(query, data)
-            self.db.commit()
+            try:
+                cur = self.db.cursor()
+                query =  "INSERT INTO entries (title, date_created, description, owner_id) VALUES (%s, %s, %s, %s)"
+                data = (title, date_created, description, owner_id)
+                cur.execute(query, data)
+                self.db.commit()
+            except:
+                pass
 
             # return true
             return 1
