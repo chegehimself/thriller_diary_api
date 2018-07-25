@@ -24,7 +24,7 @@ __Set environment variable__
 
 * open the terminal and type the following commands to create the database and the users table
 
-```py
+```
 - psql -U postgres
 
 - CREATE DATABASE thriller;
@@ -52,9 +52,8 @@ The following is a list of available endpoints in this application
 
 |EndPoint               | Functionality|
 | ------------------------------------ | ------------------------ |
-|POST api/v1/auth/signup    |Register a user  s|
-
-|POST api/v1/auth/login | login Login a user
+|POST api/v1/auth/signup    |Register a user|
+|POST api/v1/auth/login |Login a user
 
 # Testing
 * coming soon
