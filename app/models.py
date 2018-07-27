@@ -37,19 +37,6 @@ class Entry(object):
         if description and title:
             now = datetime.datetime.now()
             date_created = now.strftime("%Y-%m-%d %H:%M")
-
-            # entry id
-            entry_id = 1
-            for i in self.entries:
-                entry_id += 1
-                if i['id'] == entry_id:
-                    entry_id += 1
-            # single_entry_holder = dict()
-            # single_entry_holder['id'] = entry_id
-            # single_entry_holder['title'] = title
-            # single_entry_holder['description'] = description
-            # single_entry_holder['created'] = str(date_created)
-            # self.entries.append(single_entry_holder)
             owner_id = current_user
             try:
                 cur = self.db.cursor()
