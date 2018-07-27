@@ -48,3 +48,5 @@ flask_jwt
 jwt
 
 flasgger
+
+PyJWT
