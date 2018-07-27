@@ -17,12 +17,16 @@ class Entry(object):
     def __init__(self):
         # all entries placeholder
         self.entries = []
-        HOSTNAME = 'localhost'
-        USERNAME = 'postgres'
-        PASSWORD = '2grateful'
-        DATABASE = 'thriller'
-        # self.db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE, port=5432)
-        db = 'postgres://xqvzxugpqzozsl:6e44c7de8ec9eb08db8f5b58080378cd1c3c6bc4f4beec842949d915c4488494@ec2-107-22-169-45.compute-1.amazonaws.com:5432/dbmjf8qhfukq3i'
+        # HOSTNAME = 'localhost'
+        # USERNAME = 'postgres'
+        # PASSWORD = '2grateful'
+        # DATABASE = 'thriller'
+        HOSTNAME = 'ec2-107-22-169-45.compute-1.amazonaws.com port=5432 user=xqvzxugpqzozsl'
+        USERNAME = 'xqvzxugpqzozsl'
+        PASSWORD = '6e44c7de8ec9eb08db8f5b58080378cd1c3c6bc4f4beec842949d915c4488494'
+        DATABASE = 'dbmjf8qhfukq3i'
+        self.db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE, port=5432)
+        # db = 'postgres://xqvzxugpqzozsl:6e44c7de8ec9eb08db8f5b58080378cd1c3c6bc4f4beec842949d915c4488494@ec2-107-22-169-45.compute-1.amazonaws.com:5432/dbmjf8qhfukq3i'
 
         # cur = db.cursor()
         # cur.execute("CREATE TABLE users (ID serial PRIMARY KEY, username VARCHAR (255) NOT NULL, email VARCHAR (255) NOT NULL, password VARCHAR (255));")
@@ -72,12 +76,16 @@ class User:
     """ returns available users """
     def all_the_users(self):
         """Returns all users in databse """
-        HOSTNAME = 'localhost'
-        USERNAME = 'postgres'
-        PASSWORD = '2grateful'
-        DATABASE = 'thriller'
-        # db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)
-        db = 'postgres://xqvzxugpqzozsl:6e44c7de8ec9eb08db8f5b58080378cd1c3c6bc4f4beec842949d915c4488494@ec2-107-22-169-45.compute-1.amazonaws.com:5432/dbmjf8qhfukq3i'
+        # HOSTNAME = 'localhost'
+        # USERNAME = 'postgres'
+        # PASSWORD = '2grateful'
+        # DATABASE = 'thriller'
+        HOSTNAME = 'ec2-107-22-169-45.compute-1.amazonaws.com port=5432 user=xqvzxugpqzozsl'
+        USERNAME = 'xqvzxugpqzozsl'
+        PASSWORD = '6e44c7de8ec9eb08db8f5b58080378cd1c3c6bc4f4beec842949d915c4488494'
+        DATABASE = 'dbmjf8qhfukq3i'
+        db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE, port=5432)
+        # db = 'postgres://xqvzxugpqzozsl:6e44c7de8ec9eb08db8f5b58080378cd1c3c6bc4f4beec842949d915c4488494@ec2-107-22-169-45.compute-1.amazonaws.com:5432/dbmjf8qhfukq3i'
         cur = db.cursor()
         cur.execute("SELECT id, username, email, password FROM users")
         return cur.fetchall()
