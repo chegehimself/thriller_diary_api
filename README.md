@@ -3,6 +3,10 @@
 # status
 * coming soon ...
 
+[__Live version__](http://api-thriller-diary.herokuapp.com/api/v1/auth)
+
+[Api Documentation](http://api-thriller-diary.herokuapp.com/apidocs/)
+
 
 ### Local Installation
 
