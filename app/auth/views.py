@@ -39,6 +39,8 @@ def index():
         description: There is a server Error
       200:
         description: A welcoming message has been displayed
+      403:
+        description: Method is not allowed
      """
     if request.method == 'GET':
         
@@ -51,13 +53,44 @@ def index():
         return response, 200
 @AUTH.route('/signup', methods=['POST'])
 def user_registration():
-    user_email = request.data.get('email', '')
-    user_password = request.data.get('password', '')
-    username = request.data.get('username', '')
+    """
+This is the signup route
+    Call this api passing a username, email, and password to get registered at Thriller Diary Api
+    ---
+    tags:
+      - Signup route
+    parameters:
+      - name: email
+        type: string
+        required: true
+      - name: username
+        type: string
+        required: true
+      - name: password
+        type: string
+        minLength: 4
+        required: true
+    responses:
+      500:
+        description: Error There was a server error!
+      201:
+        description: User created successfully
+      409:
+        description: User with the provided email or username exists
+      401:
+        description: Submitted details were not accepted
+"""
+    user_email = request.data.get('email', '').strip()
+    user_password = request.data.get('password', '').strip()
+    username = request.data.get('username', '').strip()
 
     # check for empty input
-    if not user_email or not user_password or not username:
-        return {"status": "fail", "Message": "Check your details and try again"}, 401
+    if not user_email:
+        return {"status": "fail", "Message": "Please input your email"}, 401
+    if not user_password:
+        return {"status": "fail", "Message": "Check your password and try again"}, 401 
+    if not username:
+        return {"status": "fail", "Message": "Check your username and try again"}, 401
     # check username
     the_username = username.lower()
     if not re.match(r"^[a-z0-9_]*$", the_username):
