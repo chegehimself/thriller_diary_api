@@ -2,8 +2,8 @@
 
 # status
 [![Build Status](https://travis-ci.org/james-chege/thriller_diary_api.svg?branch=develop)](https://travis-ci.org/james-chege/thriller_diary_api)
-[![Coverage Status](https://coveralls.io/repos/github/james-chege/thriller_diary_api/badge.svg?branch=develop)](https://coveralls.io/github/james-chege/thriller_diary_api?branch=develop)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/94c03ff0c47e423eb0c993cfa4c7f458)](https://www.codacy.com/app/james-chege/thriller_diary_api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=james-chege/thriller_diary_api&amp;utm_campaign=Badge_Grade)
+[![Coverage Status](https://coveralls.io/repos/github/james-chege/thriller_diary_api/badge.svg?branch=develop)](https://coveralls.io/github/james-chege/thriller_diary_api?branch=develop)
 
 [__Live version__](http://api-thriller-diary.herokuapp.com/api/v1/auth)
 
