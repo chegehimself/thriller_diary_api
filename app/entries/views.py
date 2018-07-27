@@ -16,10 +16,10 @@ ENTRY = Entry()
 # USERNAME = 'postgres'
 # PASSWORD = '2grateful'
 # DATABASE = 'thriller'
-HOSTNAME = 'localhost'
-USERNAME = 'postgres'
-PASSWORD = '2grateful'
-DATABASE = 'thriller'
+HOSTNAME = 'ec2-107-22-169-45.compute-1.amazonaws.com port=5432'
+USERNAME = 'xqvzxugpqzozsl'
+PASSWORD = '6e44c7de8ec9eb08db8f5b58080378cd1c3c6bc4f4beec842949d915c4488494'
+DATABASE = 'dbmjf8qhfukq3i'
 # db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE, port=5432)
 db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE, port=5432 )
 
