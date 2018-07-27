@@ -32,6 +32,8 @@ def index():
     """
     This route welcomes a user.
     ---
+    tags:
+      - Routes
     responses:
       500:
         description: There is a server Error
@@ -55,6 +57,8 @@ def user_registration():
 This is the signup route
     Call this api route passing a username, email, and password in the body to get registered at Thriller Diary Api
     ---
+    tags:
+      - Routes
     parameters:
       - name: body
         in: body
@@ -121,6 +125,8 @@ def login():
 This is the sign-in route
     Call this api route passing a email and password to log in at Thriller Diary Api
     ---
+    tags:
+      - Routes
     parameters:
       - name: body
         in: body
