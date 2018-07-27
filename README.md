@@ -1,7 +1,7 @@
 # thriller_diary_api
 
 # status
-[![Build Status](https://travis-ci.org/james-chege/thriller_diary_api.svg?branch=master)](https://travis-ci.org/james-chege/thriller_diary_api)
+[![Build Status](https://travis-ci.org/james-chege/thriller_diary_api.svg?branch=develop)](https://travis-ci.org/james-chege/thriller_diary_api)
 [![Coverage Status](https://coveralls.io/repos/github/james-chege/thriller_diary_api/badge.svg?branch=develop)](https://coveralls.io/github/james-chege/thriller_diary_api?branch=develop)
 
 [__Live version__](http://api-thriller-diary.herokuapp.com/api/v1/auth)
