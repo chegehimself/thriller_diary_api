@@ -51,17 +51,6 @@ def index():
         return response, 200
 @AUTH.route('/signup', methods=['POST'])
 def user_registration():
-    """
-    This route helps a user to sign up.
-    ---
-    tags:
-      - Thriller Diary Api
-    responses:
-      500:
-        description: There is a server error
-      200:
-        description: user has been registered successfully.
-     """
     user_email = request.data.get('email', '')
     user_password = request.data.get('password', '')
     username = request.data.get('username', '')
