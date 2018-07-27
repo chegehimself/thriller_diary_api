@@ -37,6 +37,8 @@ flask-cors
 # for test coverage
 pytest-cov
 
+PyJWT
+
 psycopg2
 
 pygresql
@@ -49,4 +51,3 @@ jwt
 
 flasgger
 
-PyJWT

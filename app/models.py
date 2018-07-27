@@ -6,7 +6,7 @@ from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
 import psycopg2
 import datetime
-import jwt 
+import jwt
 import os
 from functools import wraps
 from flask import request, jsonify, current_app, session
