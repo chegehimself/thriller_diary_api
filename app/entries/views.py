@@ -44,13 +44,6 @@ ENT_BP = Blueprint('ent', __name__, url_prefix='/api/v1')
 
 #         response = {"status": "success", "Message": welcome_message}
 #         return response, 200
-@ENTRIES_BP.route('/test', methods=['GET'])
-def test():
-    cur = db.cursor()
-    cur.execute("SELECT id date_created, title, description, owner_id FROM entries")
-    # for username, email in cur.fetchall():
-    response = {"status": "success", "all": cur.fetchall()}
-    return response, 200
 
 @ENTRIES_BP.route('/entries', methods=['GET'])
 @token_required
