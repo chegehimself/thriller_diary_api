@@ -85,7 +85,7 @@ class TestDiaryEntry(unittest.TestCase):
 
     def test_landing_page_message(self):
         """ Test Landing page message"""
-        req = self.client().get('/api/v1/')
+        req = self.client().get('/api/v1/auth')
         self.assertEqual(req.status_code, 200)
 
     # def test_fetch_single_entry(self):
