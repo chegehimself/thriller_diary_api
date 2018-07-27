@@ -9,11 +9,43 @@ from instance.config import APP_CONFIG
 from app.models import Entry
 from . entries.views import ENTRIES_BP, ENT_BP
 from . auth.views import AUTH
+from flasgger import Swagger
 
 def create_app(config_name):
     """ creates the app with the desired environment """
     # instantiate flask app
     app = FlaskAPI(__name__, instance_relative_config=True)
+
+    Swagger(app)
+    @app.route('/api/v1/auth')
+    def welcom():
+        """
+    This route welcomes a user.
+    ---
+    tags:
+      - Thriller Diary Api
+    responses:
+      500:
+        description: There is a server Error
+      200:
+        description: A welcoming message has been displayed
+
+    """
+    @app.route('/api/v1/auth/signup', methods=['POST'])
+    def signup():
+        """
+    This route helps a user to sign up.
+    ---
+    tags:
+      - Thriller Diary Api
+    responses:
+      500:
+        description: There is a server error
+      200:
+        description: user has been registered successfully.
+
+    """
+    
     # app settings config
     app.config.from_object(APP_CONFIG[config_name])
     app.config.from_pyfile('config.py')
@@ -28,6 +60,10 @@ def create_app(config_name):
     app.register_blueprint(ENTRIES_BP)
     app.register_blueprint(ENT_BP)
     app.register_blueprint(AUTH)
+
+    # @app.route('/documentation', methos=['GET'])
+    # def docs():
+    #     return 
 
     # For the following functions pylint has been disabled only on variables and arguements
     # It is Not necessary to use the variables or the argument

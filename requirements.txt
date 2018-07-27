@@ -46,3 +46,5 @@ nose
 flask_jwt
 
 jwt
+
+flasgger

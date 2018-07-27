@@ -20,7 +20,7 @@ HOSTNAME = 'localhost'
 USERNAME = 'postgres'
 PASSWORD = '2grateful'
 DATABASE = 'thriller'
-db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)
+db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE, port=5432)
 
 @AUTH.route('/', methods=['GET'])
 def index():

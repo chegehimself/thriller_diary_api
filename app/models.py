@@ -21,7 +21,7 @@ class Entry(object):
         USERNAME = 'postgres'
         PASSWORD = '2grateful'
         DATABASE = 'thriller'
-        self.db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)
+        self.db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE, port=5432)
 
     def add_entry(self, title, description, current_user):
         """Adds new entries"""

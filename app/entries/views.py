@@ -7,6 +7,7 @@ import psycopg2
 
 from flask import Blueprint, request
 from app.models import token_required
+from flasgger import Swagger
 # import models
 from app.models import Entry
 ENTRY = Entry()
@@ -15,7 +16,7 @@ HOSTNAME = 'localhost'
 USERNAME = 'postgres'
 PASSWORD = '2grateful'
 DATABASE = 'thriller'
-db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)
+db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE, port=5432)
 
 # call all available entries
 ENTRIES = ENTRY.all_entries()
@@ -27,18 +28,17 @@ ENTRIES_BP = Blueprint('entries', __name__, url_prefix='/api/v1')
 # deal with single entry
 ENT_BP = Blueprint('ent', __name__, url_prefix='/api/v1')
 
-@ENTRIES_BP.route('/', methods=['GET'])
-def index():
-    """ root """
-    if request.method == 'GET':
+# @ENTRIES_BP.route('/', methods=['GET'])
+# def index():
+#     if request.method == 'GET':
 
-        # the following is a welcoming message (at the landing page)
-        welcome_message = {"Message": [{
-            "Welcome":"Hey! welcome to thriller diary api"
-            }]}
+#         # the following is a welcoming message (at the landing page)
+#         welcome_message = {"Message": [{
+#             "Welcome":"Hey! welcome to thriller diary api"
+#             }]}
 
-        response = {"status": "success", "Message": welcome_message}
-        return response, 200
+#         response = {"status": "success", "Message": welcome_message}
+#         return response, 200
 @ENTRIES_BP.route('/test', methods=['GET'])
 def test():
     cur = db.cursor()
