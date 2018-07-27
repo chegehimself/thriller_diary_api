@@ -1,7 +1,8 @@
 # thriller_diary_api
 
 # status
-* coming soon ...
+[![Build Status](https://travis-ci.org/james-chege/thriller_diary_api.svg?branch=master)](https://travis-ci.org/james-chege/thriller_diary_api)
+[![Coverage Status](https://coveralls.io/repos/github/james-chege/thriller_diary_api/badge.svg?branch=develop)](https://coveralls.io/github/james-chege/thriller_diary_api?branch=develop)
 
 [__Live version__](http://api-thriller-diary.herokuapp.com/api/v1/auth)
 
@@ -75,4 +76,4 @@ The following is a list of available endpoints in this application
 |PUT api/v1/entries/<int:entryId> |modify an entry|
 
 # Testing
-* coming soon
+py.test --cov=app
