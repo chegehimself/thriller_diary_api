@@ -88,16 +88,16 @@ class TestDiaryEntry(unittest.TestCase):
         req = self.client().get('/api/v1/auth')
         self.assertEqual(req.status_code, 200)
 
-    # def test_fetch_single_entry(self):
-    #     """ Test fetch single entry """
-    #     self.register_user()
-    #     result = self.login_user()
-    #     access_token = json.loads(result.data.decode())['token']
-    #     # Not neccessary to use the following variable so pylint unused variable warning is disabled
-    #     req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token}) # pylint: disable=unused-variable
-    #     req_single = self.client().get(self.single_entry_route, headers={"access-token":access_token})
-    #     self.assertEqual(req_single.status_code, 200)
-    #     self.assertIn('At Russia', str(req_single.data))
+    def test_fetch_single_entry(self):
+        """ Test fetch single entry """
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        # Not neccessary to use the following variable so pylint unused variable warning is disabled
+        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token}) # pylint: disable=unused-variable
+        req_single = self.client().get(self.single_entry_route, headers={"access-token":access_token})
+        self.assertEqual(req_single.status_code, 200)
+        self.assertIn('At Beach', str(req_single.data))
 
     def test_modify_single_entry(self):
         """ Test editing of single entry """
