@@ -29,7 +29,17 @@ db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=D
 
 @AUTH.route('/', methods=['GET'])
 def index():
-    """ root """
+    """
+    This route welcomes a user.
+    ---
+    tags:
+      - Thriller Diary Api
+    responses:
+      500:
+        description: There is a server Error
+      200:
+        description: A welcoming message has been displayed
+     """
     if request.method == 'GET':
         
         # the following is a welcoming message (at the landing page)
@@ -39,17 +49,19 @@ def index():
 
         response = {"status": "success", "Message": welcome_message}
         return response, 200
-@AUTH.route('/test', methods=['GET'])
-def test():
-    cur = db.cursor()
-    cur.execute("SELECT id, username, email, password FROM users")
-    # for username, email in cur.fetchall():
-
-    response = {"status": "success", "all": cur.fetchall()}
-    return response, 200
-
 @AUTH.route('/signup', methods=['POST'])
 def user_registration():
+    """
+    This route helps a user to sign up.
+    ---
+    tags:
+      - Thriller Diary Api
+    responses:
+      500:
+        description: There is a server error
+      200:
+        description: user has been registered successfully.
+     """
     user_email = request.data.get('email', '')
     user_password = request.data.get('password', '')
     username = request.data.get('username', '')
