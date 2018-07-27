@@ -39,14 +39,6 @@ def index():
 
         response = {"status": "success", "Message": welcome_message}
         return response, 200
-@AUTH.route('/test', methods=['GET'])
-def test():
-    cur = db.cursor()
-    cur.execute("SELECT id, username, email, password FROM users")
-    # for username, email in cur.fetchall():
-
-    response = {"status": "success", "all": cur.fetchall()}
-    return response, 200
 
 @AUTH.route('/signup', methods=['POST'])
 def user_registration():
