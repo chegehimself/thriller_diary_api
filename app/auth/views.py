@@ -64,8 +64,6 @@ This is the signup route
         in: body
         required: true
         description: The signup credentials
-        schema:
-            $ref: '#/definitions/User'
     responses:
       500:
         description: Error There was a server error!
