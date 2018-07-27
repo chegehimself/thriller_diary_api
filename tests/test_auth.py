@@ -24,7 +24,7 @@ class TestAuth(unittest.TestCase):
         self.assertEqual(req1.status_code, 409)
     
     def test_registration_success(self):
-        self.register = {"username":"spinderman", "password":"spinderman", "email":"spinderman@gmail.com"}
+        self.register = {"username":"spinderman1", "password":"spinderman1", "email":"spinderman1@gmail.com"}
         req = self.client().post(self.register_route, data=self.register) # pylint: disable=unused-variable
         self.assertEqual(req.status_code, 201)
 
