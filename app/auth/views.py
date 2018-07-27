@@ -60,16 +60,10 @@ This is the signup route
     tags:
       - Signup route
     parameters:
-      - name: email
-        type: string
+      - name: body
+        in: body
         required: true
-      - name: username
-        type: string
-        required: true
-      - name: password
-        type: string
-        minLength: 4
-        required: true
+        description: The signup credentials
     responses:
       500:
         description: Error There was a server error!
