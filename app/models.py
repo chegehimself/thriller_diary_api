@@ -21,7 +21,8 @@ class Entry(object):
         USERNAME = 'postgres'
         PASSWORD = '2grateful'
         DATABASE = 'thriller'
-        self.db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE, port=5432)
+        # self.db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE, port=5432)
+        db = 'postgres://xqvzxugpqzozsl:6e44c7de8ec9eb08db8f5b58080378cd1c3c6bc4f4beec842949d915c4488494@ec2-107-22-169-45.compute-1.amazonaws.com:5432/dbmjf8qhfukq3i'
 
     def add_entry(self, title, description, current_user):
         """Adds new entries"""
@@ -72,7 +73,8 @@ class User:
         USERNAME = 'postgres'
         PASSWORD = '2grateful'
         DATABASE = 'thriller'
-        db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)
+        # db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)
+        db = 'postgres://xqvzxugpqzozsl:6e44c7de8ec9eb08db8f5b58080378cd1c3c6bc4f4beec842949d915c4488494@ec2-107-22-169-45.compute-1.amazonaws.com:5432/dbmjf8qhfukq3i'
         cur = db.cursor()
         cur.execute("SELECT id, username, email, password FROM users")
         return cur.fetchall()
