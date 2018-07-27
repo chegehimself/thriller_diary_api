@@ -24,6 +24,9 @@ class Entry(object):
         # self.db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE, port=5432)
         db = 'postgres://xqvzxugpqzozsl:6e44c7de8ec9eb08db8f5b58080378cd1c3c6bc4f4beec842949d915c4488494@ec2-107-22-169-45.compute-1.amazonaws.com:5432/dbmjf8qhfukq3i'
 
+        cur = db.cursor()
+        cur.execute("CREATE TABLE users (ID serial PRIMARY KEY, username VARCHAR (255) NOT NULL, email VARCHAR (255) NOT NULL, password VARCHAR (255));")
+        cur.execute("CREATE TABLE entries (ID serial PRIMARY KEY, title VARCHAR (255) NOT NULL, date_created VARCHAR (255) NOT NULL, description VARCHAR (255) NOT NULL, owner_id integer NOT NULL, CONSTRAINT users_id_fkey FOREIGN KEY (id)REFERENCES users (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION);")
     def add_entry(self, title, description, current_user):
         """Adds new entries"""
 
