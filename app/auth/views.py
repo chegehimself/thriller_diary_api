@@ -55,7 +55,7 @@ def index():
 def user_registration():
     """
 This is the signup route
-    Call this api passing a username, email, and password to get registered at Thriller Diary Api
+    Call this api route passing a username, email, and password in the body to get registered at Thriller Diary Api
     ---
     tags:
       - Signup route
@@ -64,6 +64,8 @@ This is the signup route
         in: body
         required: true
         description: The signup credentials
+        schema:
+            $ref: '#/definitions/User'
     responses:
       500:
         description: Error There was a server error!
@@ -73,6 +75,8 @@ This is the signup route
         description: User with the provided email or username exists
       401:
         description: Submitted details were not accepted
+      403:
+        description: Method is not allowed
 """
     user_email = request.data.get('email', '').strip()
     user_password = request.data.get('password', '').strip()
@@ -119,11 +123,34 @@ This is the signup route
 
 @AUTH.route('/login', methods=['POST'])
 def login():
-    user_email = str(request.data.get('email', '').strip())
-    user_password = str(request.data.get('password', '').strip())
+    """
+This is the sign-in route
+    Call this api route passing a email and password to log in at Thriller Diary Api
+    ---
+    tags:
+      - Sign-in route
+    parameters:
+      - name: body
+        in: body
+        required: true
+        description: The log in credentials
+    responses:
+      500:
+        description: Error There was a server error!
+      200:
+        description: logged successfully(a token is given)
+      401:
+        description: details are not as expected
+      403:
+        description: Method is not allowed
+    """
+    user_email = str(request.data.get('email', ''))
+    user_password = str(request.data.get('password', ''))
     # check if the submited data
-    if not user_email or not user_password:
-        return {"status": "fail", "Message": "Check your details and try again"}, 401
+    if not user_email:
+        return jsonify({"status": "fail", "Message": "Please Provide a Password"}), 401
+    if not user_password:
+        return jsonify({"status": "fail", "Message": "Please Provide a Password"}), 401
     # check user existense
     checker = db.cursor()
     checker.execute("SELECT id, username, email, password FROM users")
