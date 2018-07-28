@@ -64,6 +64,23 @@ This is the signup route
         in: body
         required: true
         description: The signup credentials
+        schema:
+          type: object
+          required:
+            -username
+            -email
+            -password
+          properties:
+            username:
+              type: string
+              example: english
+            email:
+              type: string
+              example: english@gmail.com
+            password:
+              type: string
+              example: strongestpassword
+
     responses:
       500:
         description: Error There was a server error!
