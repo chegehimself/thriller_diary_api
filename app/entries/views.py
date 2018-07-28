@@ -174,6 +174,7 @@ This is the route modifies fetches specified entry
     # if there are no entries there is no need to do anything
     # if not ENTRIES:
     #     return {"status": "Fail", "entry": {"Error":"That entry does not exist!"}}, 404
+    
     cur = db.cursor()
     cur.execute("SELECT * FROM entries")
     certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
@@ -186,12 +187,11 @@ This is the route modifies fetches specified entry
             entry_id = entry[0]
             response = {
                 "status": "success", "entry": {"id":entry_id,
-                                               "title":str(title),
-                                               "description":str(description),
-                                               "created":date_created
-                                              }}
+                                                "title":str(title),
+                                                "description":str(description),
+                                                "created":date_created
+                                                }}
             return response, 200
-
 @ENT_BP.route('/entries/<int:id_entry>', methods=['PUT'])
 @token_required
 def update_single_entry(current_user, id_entry):
@@ -208,14 +208,29 @@ This is the route modifies an new entry
         type: string
       - in: path
         name: id_entry
-        description: id of entry to fetch
         required: true
-        type: number    
+        type: number
+      - in: body
+        name: NewEntry
+        description: The new entry
+        required: true
+        schema:
+          type: object
+          required:
+            -description
+            -title
+          properties:
+            title:
+              type: string
+              example: At Panama Beach
+            description:
+              type: string
+              example: Me and my dad decide to spend our saturday...
     responses:
       500:
         description: Error There was a server error!
-      200:
-        description: Entry has been found and displayed
+      201:
+        description: Entry has been updated
       403:
         description: Method is not allowed
 """
