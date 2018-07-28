@@ -1,49 +1,49 @@
-# for creating beautiful command line interfaces
+aniso8601==3.0.2
+asn1crypto==0.24.0
+astroid==1.6.5
+atomicwrites==1.1.5
+attrs==18.1.0
+certifi==2018.4.16
+cffi==1.11.5
+chardet==3.0.4
 click==6.7
-
-# a microframework for Python
+colorama==0.3.9
+coverage==4.5.1
+coveralls==1.3.0
+cryptography==2.3
+docopt==0.6.2
+flasgger==0.9.0
 Flask==1.0.2
-
-# to help the app run on heroku server
+Flask-API==1.0
+Flask-Cors==3.0.6
+Flask-JWT==0.3.2
+Flask-RESTful==0.3.6
 gunicorn==19.9.0
-
-# helps to safely send data to untrusted environments
+idna==2.7
+isort==4.3.4
 itsdangerous==0.24
-
-# templating language for Python
 Jinja2==2.10
-
-# Safely add untrusted strings to HTML/XML markup
+jsonschema==2.6.0
+lazy-object-proxy==1.3.1
 MarkupSafe==1.0
-
-# WSGI(Web Server Gateway Interface) utility library for Python
-Werkzeug==0.14.1
-
-# Pep8 styling
+mccabe==0.6.1
+mistune==0.8.3
+more-itertools==4.2.0
+nose==1.3.7
+pluggy==0.6.0
+psycopg2==2.7.5
+py==1.5.4
+pycparser==2.18
+PyGreSQL==5.0.4
+PyJWT==1.6.4
 pylint==1.9.2
-
-# provides the building blocks for creating a great REST API.
-flask-restful
-
-# provides an implementation of browsable APIs
-flask-api
-
-# for testing coverage
-coveralls
-
-# for cross origin sharing
-flask-cors
-
-# for test coverage
-pytest-cov
-
-PyJWT
-
-psycopg2
-
-pygresql
-
-nose
-
-flasgger
-
+pytest==3.6.3
+pytest-cov==2.5.1
+pytz==2018.5
+PyYAML==3.13
+requests==2.19.1
+six==1.11.0
+typed-ast==1.1.0
+urllib3==1.23
+Werkzeug==0.14.1
+wrapt==1.10.11
