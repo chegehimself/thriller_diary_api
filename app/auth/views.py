@@ -132,6 +132,18 @@ This is the sign-in route
         in: body
         required: true
         description: The log in credentials
+        schema:
+          type: object
+          required:
+            -email
+            -password
+          properties:
+            email:
+              type: string
+              example: english@gmail.com
+            password:
+              type: string
+              example: strongestpassword
     responses:
       500:
         description: Error There was a server error!
