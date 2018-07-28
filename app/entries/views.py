@@ -138,7 +138,7 @@ This is the route adds a new entry
 @token_required
 def fetch_single_entry(current_user, id_entry):
     """
-This is the route modifies fetches specified entry
+This is the route fetches specified entry
     Call this api route passing a title and description to add  an entry at Thriller Diary Api (Token Required!)
     ---
     tags:
@@ -150,7 +150,7 @@ This is the route modifies fetches specified entry
         type: string
       - in: path
         name: id_entry
-        description: id of entry to modify
+        description: id of the entry
         required: true
         type: number    
     responses:
