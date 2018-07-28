@@ -31,21 +31,16 @@ class Entry(object):
             now = datetime.datetime.now()
             date_created = now.strftime("%Y-%m-%d %H:%M")
             owner_id = current_user
-            try:
-                cur = self.db.cursor()
-                query =  "INSERT INTO entries (title, date_created, description, owner_id) VALUES (%s, %s, %s, %s)"
-                data = (title, date_created, description, owner_id)
-                cur.execute(query, data)
-                self.db.commit()
-            except:
-                pass
+    
+            cur = self.db.cursor()
+            query =  "INSERT INTO entries (title, date_created, description, owner_id) VALUES (%s, %s, %s, %s)"
+            data = (title, date_created, description, owner_id)
+            cur.execute(query, data)
+            self.db.commit()
+            
 
             # return true
             return 1
-
-        # on failure to add return false
-        return 0
-
 
     def all_entries(self):
         """Return available entries"""

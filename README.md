@@ -30,7 +30,7 @@ __Set environment variable__
 
 * open the terminal and type the following commands to create the database and the required tables
 
-```sql
+```
 - psql -U postgres
 
 - CREATE DATABASE thriller;
@@ -55,6 +55,7 @@ CREATE TABLE entries (
       ON UPDATE NO ACTION ON DELETE NO ACTION
   );
   ```
+  * Change the server connection details in `app/db.py` to match your server's.
 
 
 __Start Server__

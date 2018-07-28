@@ -137,3 +137,21 @@ def update_single_entry(current_user, id_entry):
             "status": "success",
             "entry": {"Message":"Updated successfully"}}
         return response, 201
+
+@ENT_BP.route('entries/<int:id_entry>', methods=["DELETE"])
+@token_required
+def delete_entry(current_user, id_entry):
+    cur = db.cursor()
+    cur.execute("SELECT * FROM entries")
+    certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
+    for i in range (0, len(certain_user_entries)):
+        if certain_user_entries[i][4] == id_entry:
+            return {"status":"fail", "message":"That entry is not available"}
+    query = "DELETE from entries WHERE entries.id = (%s)"
+    cur.execute(query, [id_entry])
+    db.commit()
+    response = {
+        "status":"success",
+        "Deleted":{"id":id_entry}
+    }
+    return response, 200
