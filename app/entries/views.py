@@ -268,7 +268,7 @@ This is the route modifies an new entry
 def delete_entry(current_user, id_entry):
     """
 This is the route Deletes a specified entry
-    Call this api route passing an id to add  an entry at Thriller Diary Api (Token Required!)
+    Call this api route passing an id to delete  an entry at Thriller Diary Api (Token Required!)
     ---
     tags:
       - Routes
