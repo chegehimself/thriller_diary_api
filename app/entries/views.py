@@ -136,13 +136,40 @@ This is the route adds a new entry
         return response, 401
     # title = json_data['title']
     # description = json_data['description']
-    ENTRY.add_entry(title, description, current_user)
+    ENTRY.add_entry(title, description, current_user   )
     response = {"status": "success", "entry": {"title":str(title), "description":str(description)}}
     return response, 201
 
 @ENT_BP.route('/entries/<int:id_entry>', methods=['GET'])
 @token_required
 def fetch_single_entry(current_user, id_entry):
+    """
+This is the route modifies fetches specified entry
+    Call this api route passing a title and description to  an entry at Thriller Diary Api (Token Required!)
+    ---
+    tags:
+      - Routes
+    parameters:
+      - in: header
+        name: access-token
+        required: true
+        type: string
+      - in: path
+        name: id_entry
+        description: id of entry to modify
+        required: true
+        type: number    
+    responses:
+      500:
+        description: Error There was a server error!
+      201:
+        description: Entry has been updated successfully
+      401:
+        description: wrong parameters were provided
+      403:
+        description: Method is not allowed
+"""
+
     """ will return a single entry """
     # if there are no entries there is no need to do anything
     # if not ENTRIES:
@@ -168,6 +195,31 @@ def fetch_single_entry(current_user, id_entry):
 @ENT_BP.route('/entries/<int:id_entry>', methods=['PUT'])
 @token_required
 def update_single_entry(current_user, id_entry):
+    """
+This is the route modifies an new entry
+    Call this api route passing an id to fetch a single entry at Thriller Diary Api (Token Required!)
+    ---
+    tags:
+      - Routes
+    parameters:
+      - in: header
+        name: access-token
+        required: true
+        type: string
+      - in: path
+        name: id_entry
+        description: id of entry to fetch
+        required: true
+        type: number    
+    responses:
+      500:
+        description: Error There was a server error!
+      200:
+        description: Entry has been found and displayed
+      403:
+        description: Method is not allowed
+"""
+
     """ Edits a single entry """
     # if there are no entries there is no need to do anything
     # if not ENTRIES:
