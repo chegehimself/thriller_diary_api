@@ -139,7 +139,7 @@ This is the route adds a new entry
 def fetch_single_entry(current_user, id_entry):
     """
 This is the route modifies fetches specified entry
-    Call this api route passing a title and description to  an entry at Thriller Diary Api (Token Required!)
+    Call this api route passing a title and description to add  an entry at Thriller Diary Api (Token Required!)
     ---
     tags:
       - Routes
@@ -191,7 +191,7 @@ This is the route modifies fetches specified entry
 def update_single_entry(current_user, id_entry):
     """
 This is the route modifies an new entry
-    Call this api route passing an id to fetch a single entry at Thriller Diary Api (Token Required!)
+    Call this api route passing an id to modify a single entry at Thriller Diary Api (Token Required!)
     ---
     tags:
       - Routes
@@ -263,3 +263,47 @@ This is the route modifies an new entry
             "status": "success",
             "entry": {"Message":"Updated successfully"}}
         return response, 201
+@ENT_BP.route('entries/<int:id_entry>', methods=["DELETE"])
+@token_required
+def delete_entry(current_user, id_entry):
+    """
+This is the route Deletes a specified entry
+    Call this api route passing an id to add  an entry at Thriller Diary Api (Token Required!)
+    ---
+    tags:
+      - Routes
+    parameters:
+      - in: header
+        name: access-token
+        required: true
+        type: string
+      - in: path
+        name: id_entry
+        description: id of entry to modify
+        required: true
+        type: number    
+    responses:
+      500:
+        description: Error There was a server error!
+      200:
+        description: Entry has been deleted successfully
+      401:
+        description: wrong parameters were provided
+      403:
+        description: Method is not allowed
+"""
+
+    cur = db.cursor()
+    cur.execute("SELECT * FROM entries")
+    certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
+    for i in range (0, len(certain_user_entries)):
+        if certain_user_entries[i][4] == id_entry:
+            return {"status":"fail", "message":"That entry is not available"}
+    query = "DELETE from entries WHERE entries.id = (%s)"
+    cur.execute(query, [id_entry])
+    db.commit()
+    response = {
+        "status":"success",
+        "Deleted":{"id":id_entry}
+    }
+    return response, 200
