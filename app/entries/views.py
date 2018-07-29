@@ -43,7 +43,7 @@ ENT_BP = Blueprint('ent', __name__, url_prefix='/api/v1')
 @token_required
 def get_all_entries(current_user):
     """
-This is the route to get all diary entries
+This gets all diary entries
     Call this api route to see all user's diary entries Thriller Diary Api (Token Required!)
     ---
     tags:
@@ -75,7 +75,7 @@ This is the route to get all diary entries
 @token_required
 def add_new_entry(current_user):
     """
-This is the route adds a new entry
+This route adds a new entry
     Call this api route passing a title and description to add an entry at Thriller Diary Api (Token Required!)
     ---
     tags:
@@ -138,7 +138,7 @@ This is the route adds a new entry
 @token_required
 def fetch_single_entry(current_user, id_entry):
     """
-This is the route fetches specified entry
+This route fetches specified entry
     Call this api route passing a title and description to add  an entry at Thriller Diary Api (Token Required!)
     ---
     tags:
@@ -189,7 +189,7 @@ This is the route fetches specified entry
 @token_required
 def update_single_entry(current_user, id_entry):
     """
-This is the route modifies an new entry
+This route modifies an new entry
     Call this api route passing an id to modify a single entry at Thriller Diary Api (Token Required!)
     ---
     tags:
@@ -272,7 +272,7 @@ This is the route modifies an new entry
 @token_required
 def delete_entry(current_user, id_entry):
     """
-This is the route Deletes a specified entry
+This route Deletes a specified entry
     Call this api route passing an id to delete  an entry at Thriller Diary Api (Token Required!)
     ---
     tags:
