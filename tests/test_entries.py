@@ -121,6 +121,10 @@ class TestDiaryEntry(unittest.TestCase):
         req2 = self.client().put(self.single_entry_route, data=self.entry_bad_title, headers={"access-token":access_token})
         req3 = self.client().put(self.single_entry_route, data=self.entry_no_description, headers={"access-token":access_token})
         req4 = self.client().put(self.single_entry_route, data=self.entry_no_title, headers={"access-token":access_token})
+        # an entry that does not belong to the user
+        req5 = self.client().put('api/v1/entries/2', data=self.entry_new, headers={"access-token":access_token})
+        self.assertEqual(req5.status_code, 404)
+        self.assertIn('not one of your entries', str(req5.data))
         self.assertEqual(req2.status_code, 401)
         self.assertEqual(req3.status_code, 401)
         self.assertEqual(req4.status_code, 401)
@@ -187,7 +191,7 @@ class TestDeletion(unittest.TestCase):
         self.assertEqual(delete_req.status_code, 404)
 
 class TestProductionError(unittest.TestCase):
-    """Test Server error in production environemnt """
+    """Test Server error in production environemnt"""
     def setUp(self):
         self.app = create_app(config_name="production")
         self.client = self.app.test_client
