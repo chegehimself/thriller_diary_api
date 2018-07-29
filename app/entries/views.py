@@ -85,20 +85,20 @@ def fetch_single_entry(current_user, id_entry):
     cur = db.cursor()
     cur.execute("SELECT * FROM entries")
     certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-    for entry in certain_user_entries:
-        # check if the entry exists and return
-        if entry[0] == id_entry:
-            title = entry[1]
-            description = entry[3]
-            date_created = entry[2]
-            entry_id = entry[0]
-            response = {
-                "status": "success", "entry": {"id":entry_id,
-                                               "title":str(title),
-                                               "description":str(description),
-                                               "created":date_created
-                                              }}
-            return response, 200
+    if len(certain_user_entries) == 0:
+      return {"status":"fail", "message":"you don't have such an entry"}
+    if certain_user_entries[0][0] != id_entry:
+        return {"status":"fail", "message":"tha is not one of your entries fetch all to see your entries' ids"}
+    else:
+        entry_id = certain_user_entries[0][0]
+        title = certain_user_entries[0][1]
+        date_created = certain_user_entries[0][2]
+        description = certain_user_entries[0][3]
+        response = {"status": "success", "entry": {"id":entry_id,
+                                            "title":str(title),
+                                            "description":str(description),
+                                            "created":date_created}}
+        return response, 200
 
 @ENT_BP.route('/entries/<int:id_entry>', methods=['PUT'])
 @token_required
