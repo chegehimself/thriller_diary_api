@@ -11,6 +11,12 @@ from app import create_app
 from app.models import Entry
 import json
 
+from app.db import Connection
+
+conn = Connection()
+
+db = conn.db_return()
+
 class TestDiaryEntry(unittest.TestCase):
     """test for successful and unsuccessful entry addition"""
     def setUp(self):
@@ -27,6 +33,11 @@ class TestDiaryEntry(unittest.TestCase):
         self.unavailable_id_route = 'api/v1/entries/300'
         self.bad_url = '/api/v1/entries/not_available'
 
+        with self.app.app_context():
+            cur = db.cursor()
+            cur.execute('DELETE FROM "users";')
+            cur.execute('DELETE FROM "entries";')
+            db.commit()
 
     # login user
     def register_user(self, username="thor", email="thor@gmail.com", password="thor"):
@@ -88,16 +99,16 @@ class TestDiaryEntry(unittest.TestCase):
         req = self.client().get('/api/v1/auth')
         self.assertEqual(req.status_code, 200)
 
-    # def test_fetch_single_entry(self):
-    #     """ Test fetch single entry """
-    #     self.register_user()
-    #     result = self.login_user()
-    #     access_token = json.loads(result.data.decode())['token']
-    #     # Not neccessary to use the following variable so pylint unused variable warning is disabled
-    #     req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token}) # pylint: disable=unused-variable
-    #     req_single = self.client().get(self.single_entry_route, headers={"access-token":access_token})
-    #     self.assertEqual(req_single.status_code, 200)
-    #     self.assertIn('At Beach', str(req_single.data))
+    def test_fetch_single_entry(self):
+        """ Test fetch single entry """
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        # Not neccessary to use the following variable so pylint unused variable warning is disabled
+        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token}) # pylint: disable=unused-variable
+        req_single = self.client().get('api/v1/entries/1', headers={"access-token":access_token})
+        self.assertEqual(req_single.status_code, 200)
+        self.assertIn('At Russia', str(req_single.data))
 
     def test_modify_single_entry(self):
         """ Test editing of single entry """
@@ -150,7 +161,7 @@ class TestDeletion(unittest.TestCase):
         self.app = create_app(config_name="testing")
         self.client = self.app.test_client
         self.entry = {'title':'At Russia', 'description':'Me and my three friends decided ...'}
-        self.single_entry_route = 'api/v1/entries/47'
+        self.single_entry_route = 'api/v1/entries/84'
         self.entry_route = 'api/v1/entries/'
         self.unavailable_id_route = 'api/v1/entries/300'
         self.register_user()
@@ -160,20 +171,20 @@ class TestDeletion(unittest.TestCase):
     def test_deletion_on_empty_entries(self):
         """ Test for deletion on empty"""
         req = self.client().delete(self.single_entry_route, headers={"access-token":self.access_token})
-        self.assertNotEqual(req.status_code, 404)
+        self.assertEqual(req.status_code, 404)
 
-    def test_deletion_success(self):
-        """ test for successful entry deletion """
-        # Not neccessary to use the following variable so pylint unused variable warning is disabled
-        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":self.access_token}) # pylint: disable=unused-variable
-        delete_req = self.client().delete('api/v1/entries/2', headers={"access-token":self.access_token})
-        self.assertEqual(delete_req.status_code, 200)
+    # def test_deletion_success(self):
+    #     """ test for successful entry deletion """
+    #     # Not neccessary to use the following variable so pylint unused variable warning is disabled
+    #     req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":self.access_token}) # pylint: disable=unused-variable
+    #     delete_req = self.client().delete('api/v1/entries/126', headers={"access-token":self.access_token})
+    #     self.assertEqual(delete_req.status_code, 200)
 
-    # def test_delete_fail_on_unavailable_id(self):
-    #     """ Test for deletion on unavailable entry """
-    #     req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":self.access_token})
-    #     delete_req = self.client().delete(self.unavailable_id_route, headers={"access-token":self.access_token})
-    #     self.assertEqual(delete_req.status_code, 404)
+    def test_delete_fail_on_unavailable_id(self):
+        """ Test for deletion on unavailable entry """
+        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":self.access_token})
+        delete_req = self.client().delete(self.unavailable_id_route, headers={"access-token":self.access_token})
+        self.assertEqual(delete_req.status_code, 404)
 
 class TestProductionError(unittest.TestCase):
     """Test Server error in production environemnt """

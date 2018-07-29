@@ -88,7 +88,7 @@ def fetch_single_entry(current_user, id_entry):
     if len(certain_user_entries) == 0:
       return {"status":"fail", "message":"you don't have such an entry"}
     if certain_user_entries[0][0] != id_entry:
-        return {"status":"fail", "message":"tha is not one of your entries fetch all to see your entries' ids"}
+        return {"status":"fail", "message":"that is not one of your entries fetch all to see your entries' ids"}
     else:
         entry_id = certain_user_entries[0][0]
         title = certain_user_entries[0][1]
@@ -128,9 +128,9 @@ def update_single_entry(current_user, id_entry):
     cur.execute("SELECT * FROM entries")
     certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
     if len(certain_user_entries) == 0:
-      return {"status":"fail", "message":"you don't have such an entry"}
+      return {"status":"fail", "message":"you don't have such an entry"}, 404
     if certain_user_entries[0][0] != id_entry:
-        return {"status":"fail", "message":"tha is not one of your entries fetch all to see your entries' ids"}
+        return {"status":"fail", "message":"that is not one of your entries fetch all to see your entries' ids"}, 404
     for entry in certain_user_entries:
         # update the entry
         query = "UPDATE entries SET description=(%s), title=(%s) WHERE id = (%s)"
@@ -149,9 +149,9 @@ def delete_entry(current_user, id_entry):
     cur.execute("SELECT * FROM entries")
     certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
     if len(certain_user_entries) == 0:
-      return {"status":"fail", "message":"you don't have such an entry"}
+      return {"status":"fail", "message":"you don't have such an entry"}, 404
     if certain_user_entries[0][0] != id_entry:
-        return {"status":"fail", "message":"tha is not one of your entries fetch all to see your entries' ids"}
+        return {"status":"fail", "message":"tha is not one of your entries fetch all to see your entries' ids"}, 404
     query = "DELETE from entries WHERE entries.id = (%s)"
     cur.execute(query, [id_entry])
     db.commit()

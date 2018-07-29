@@ -29,7 +29,7 @@ class TestAuth(unittest.TestCase):
         self.assertEqual(req.status_code, 201)
 
     def test_login_success(self):
-        self.user_data = {"email":"superman@gmail.com", "password":"69mansuper"}
+        self.user_data = {"email":"thor@gmail.com", "password":"thor"}
         req = self.client().post(self.login_route, data=self.user_data) # pylint: disable=unused-variable
         self.assertEqual(req.status_code, 200)
     

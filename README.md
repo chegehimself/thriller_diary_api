@@ -30,7 +30,7 @@ __Set environment variable__
 
 * open the terminal and type the following commands to create the database and the required tables
 
-```
+```s
 - psql -U postgres
 
 - CREATE DATABASE thriller;
@@ -55,9 +55,31 @@ CREATE TABLE entries (
       ON UPDATE NO ACTION ON DELETE NO ACTION
   );
   ```
-  * Change the server connection details in `app/db.py` to match your server's.
 
+  * __Creating database for testing__
+```s
+- psql -U postgres
 
+- CREATE DATABASE tests;
+
+- \connect tests
+
+ CREATE TABLE users (
+  ID integer DEFAULT 1,
+  username VARCHAR (255) NOT NULL,
+  email VARCHAR (255) NOT NULL,
+  password VARCHAR (255)
+  );
+
+CREATE TABLE entries (
+  ID integer DEFAULT 1,
+  title VARCHAR (255) NOT NULL,
+  date_created VARCHAR (255) NOT NULL,
+  description VARCHAR (255) NOT NULL,
+  owner_id integer NOT NULL
+  );
+```
+* ___Change the server credentials in db.py to match yours__ (_set `dbname = 'tests'` to run the tests_)
 __Start Server__
 ```py
 python run.py
