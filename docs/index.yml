@@ -1,0 +1,11 @@
+  This route welcomes a user.
+  ---
+  tags:
+    - Routes
+  responses:
+    500:
+      description: There is a server Error
+    200:
+      description: A welcoming message has been displayed
+    403:
+      description: Method is not allowed

@@ -8,6 +8,7 @@ import psycopg2
 from flask import Blueprint, request
 from app.models import token_required
 from flasgger import Swagger
+from flasgger.utils import swag_from
 # import models
 from app.models import Entry
 ENTRY = Entry()
@@ -39,6 +40,7 @@ ENT_BP = Blueprint('ent', __name__, url_prefix='/api/v1')
 
 @ENTRIES_BP.route('/entries', methods=['GET'])
 @token_required
+@swag_from('/docs/get_entries.yml')
 def get_all_entries(current_user):
     """Retrives all Entries"""
     if request.method == 'GET':
@@ -50,6 +52,7 @@ def get_all_entries(current_user):
 
 @ENTRIES_BP.route('/entries', methods=['POST'])
 @token_required
+@swag_from('/docs/add_entry.yml')
 def add_new_entry(current_user):
     """Add an entry"""
     # json_data = request.get_json()
@@ -75,6 +78,7 @@ def add_new_entry(current_user):
 
 @ENT_BP.route('/entries/<int:id_entry>', methods=['GET'])
 @token_required
+@swag_from('/docs/get_single.yml')
 def fetch_single_entry(current_user, id_entry):
     """ will return a single entry """
     # if there are no entries there is no need to do anything
@@ -100,6 +104,7 @@ def fetch_single_entry(current_user, id_entry):
 
 @ENT_BP.route('/entries/<int:id_entry>', methods=['PUT'])
 @token_required
+@swag_from('/docs/modify.yml')
 def update_single_entry(current_user, id_entry):
     """ Edits a single entry """
     # if there are no entries there is no need to do anything
@@ -142,6 +147,7 @@ def update_single_entry(current_user, id_entry):
 
 @ENT_BP.route('entries/<int:id_entry>', methods=["DELETE"])
 @token_required
+@swag_from('/docs/delete.yml')
 def delete_entry(current_user, id_entry):
     cur = db.cursor()
     cur.execute("SELECT * FROM entries")

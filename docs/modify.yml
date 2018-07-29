@@ -1,0 +1,37 @@
+This route modifies an new entry
+    Call this api route passing an id to modify a single entry at Thriller Diary Api (Token Required!)
+    ---
+    tags:
+      - Routes
+    parameters:
+      - in: header
+        name: access-token
+        required: true
+        type: string
+      - in: path
+        name: id_entry
+        required: true
+        type: number
+      - in: body
+        name: NewEntry
+        description: The new entry
+        required: true
+        schema:
+          type: object
+          required:
+            -description
+            -title
+          properties:
+            title:
+              type: string
+              example: At Panama Beach
+            description:
+              type: string
+              example: Me and my dad decide to spend our saturday...
+    responses:
+      500:
+        description: Error There was a server error!
+      201:
+        description: Entry has been updated
+      403:
+        description: Method is not allowed

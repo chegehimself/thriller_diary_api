@@ -1,0 +1,36 @@
+This adds a new entry
+    Call this api route passing a title and description to add an entry at Thriller Diary Api (Token Required!)
+    ---
+    tags:
+      - Routes
+    parameters:
+      - in: header
+        name: access-token
+        required: true
+        type: string
+      - in: body
+        name: entry
+        description: The entry
+        required: true
+        schema:
+          type: object
+          required:
+            -description
+            -title
+          properties:
+            title:
+              type: string
+              example: At Beach
+            description:
+              type: string
+              example: Me and my three friends decide to spend our saturday...
+    responses:
+      500:
+        description: Error There was a server error!
+      201:
+        description: Entry has been created successfully
+      401:
+        description: wrong parameters were provided
+      403:
+        description: Method is not allowed
+

@@ -1,0 +1,19 @@
+This gets all diary entries
+    Call this api route to see all user's diary entries Thriller Diary Api (Token Required!)
+    ---
+    tags:
+      - Routes
+    parameters:
+      - in: header
+        name: access-token
+        required: true
+        type: string
+    responses:
+      500:
+        description: Error There was a server error!
+      200:
+        description: Entries has been displayed
+      401:
+        description: Token not provided or is invalid
+      403:
+        description: Method is not allowed

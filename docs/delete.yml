@@ -1,0 +1,25 @@
+This Deletes a specified entry
+    Call this api route passing an id to delete  an entry at Thriller Diary Api (Token Required!)
+    ---
+    tags:
+      - Routes
+    parameters:
+      - in: header
+        name: access-token
+        required: true
+        type: string
+      - in: path
+        name: id_entry
+        description: id of entry to modify
+        required: true
+        type: number    
+    responses:
+      500:
+        description: Error There was a server error!
+      200:
+        description: Entry has been deleted successfully
+      401:
+        description: wrong parameters were provided
+      403:
+        description: Method is not allowed
+

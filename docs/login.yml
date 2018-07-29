@@ -1,0 +1,31 @@
+This is the sign-in route
+    Call this api route passing a email and password to log in at Thriller Diary Api
+    ---
+    tags:
+      - Routes
+    parameters:
+      - name: body
+        in: body
+        required: true
+        description: The log in credentials
+        schema:
+          type: object
+          required:
+            -email
+            -password
+          properties:
+            email:
+              type: string
+              example: english@gmail.com
+            password:
+              type: string
+              example: strongestpassword
+    responses:
+      500:
+        description: Error There was a server error!
+      200:
+        description: logged successfully(a token is given)
+      401:
+        description: details are not as expected
+      403:
+        description: Method is not allowed

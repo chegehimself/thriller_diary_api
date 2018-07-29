@@ -3,12 +3,14 @@ app/auth/views.py
 """
 import psycopg2
 import re
-from flask import Blueprint, request, make_response, jsonify, session
+from flask import Blueprint, request, jsonify
 from flask_api import FlaskAPI
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 import datetime
-import os
+from flasgger import Swagger
+from flasgger.utils import swag_from
+
 # authentication blueprint
 
 AUTH = Blueprint('authentication', __name__, url_prefix='/api/v1/auth')
@@ -22,6 +24,7 @@ conn = Connection()
 db = conn.db_return()
 
 @AUTH.route('/', methods=['GET'])
+@swag_from('/docs/index.yml')
 def index():
     """ root """
     if request.method == 'GET':
@@ -35,6 +38,7 @@ def index():
         return response, 200
 
 @AUTH.route('/signup', methods=['POST'])
+@swag_from('/docs/signup.yml')
 def user_registration():
     user_email = request.data.get('email', '')
     user_password = request.data.get('password', '')
@@ -76,6 +80,7 @@ def user_registration():
 #     return response, 200
 
 @AUTH.route('/login', methods=['POST'])
+@swag_from('/docs/login.yml')
 def login():
     user_email = str(request.data.get('email', '').strip())
     user_password = str(request.data.get('password', '').strip())

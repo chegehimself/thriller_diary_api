@@ -1,0 +1,37 @@
+This is the signup route
+    Call this api route passing a username, email, and password in the body to get registered at Thriller Diary Api
+    ---
+    tags:
+      - Routes
+    parameters:
+      - name: body
+        in: body
+        required: true
+        description: The signup credentials
+        schema:
+          type: object
+          required:
+            -username
+            -email
+            -password
+          properties:
+            username:
+              type: string
+              example: english
+            email:
+              type: string
+              example: english@gmail.com
+            password:
+              type: string
+              example: strongestpassword
+    responses:
+      500:
+        description: Error There was a server error!
+      201:
+        description: User created successfully
+      409:
+        description: User with the provided email or username exists
+      401:
+        description: Submitted details were not accepted
+      403:
+        description: Method is not allowed
