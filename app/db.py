@@ -20,16 +20,16 @@ class Connection(object):
         # psql -U tkvjvlrggrkghq -h ec2-50-16-241-91.compute-1.amazonaws.com  -p 5432 -d d5pkbo1rnnpott
         
         # local connection
-        self.HOSTNAME = 'localhost'
-        self.USERNAME = 'postgres'
-        self.PASSWORD = '2grateful'
-        self.DATABASE = 'tests'
+        # self.HOSTNAME = 'localhost'
+        # self.USERNAME = 'postgres'
+        # self.PASSWORD = '2grateful'
+        # self.DATABASE = 'tests'
 
         # heroku testing db
-        # self.HOSTNAME = 'ec2-50-16-241-91.compute-1.amazonaws.com'
-        # self.USERNAME = 'tkvjvlrggrkghq'
-        # self.PASSWORD = 'd65251fe55f72480c2bcec57179f094140167876bd903fc90b36da69f24e8d50'
-        # self.DATABASE = 'd5pkbo1rnnpott'
+        self.HOSTNAME = 'ec2-50-16-241-91.compute-1.amazonaws.com'
+        self.USERNAME = 'tkvjvlrggrkghq'
+        self.PASSWORD = 'd65251fe55f72480c2bcec57179f094140167876bd903fc90b36da69f24e8d50'
+        self.DATABASE = 'd5pkbo1rnnpott'
         self.db = psycopg2.connect( host=self.HOSTNAME, user=self.USERNAME, password=self.PASSWORD, dbname=self.DATABASE, port=5432)
 
     def db_return(self):
