@@ -64,7 +64,7 @@ class TestDiaryEntry(unittest.TestCase):
         access_token = json.loads(result.data.decode())['token']
         # obtain the access token
         # Not neccessary to use the following variable so pylint unused variable warning is disabled
-        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token}) 
+        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token}) # pylint: disable=unused-variable
         req_all = self.client().get(self.entry_route, headers={"access-token":access_token})
         self.assertEqual(req_all.status_code, 200)
         self.assertIn('At Russia', str(req_all.data))
@@ -101,6 +101,34 @@ class TestDiaryEntry(unittest.TestCase):
             self.assertEqual(req4.status_code, 401)
             self.assertEqual(req.status_code, 201)
             self.assertIn('At Russia', str(req.data))
+    def test_for_unavailable_id_fetch(self):
+        """ test for fetch of an unavailable id """
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token})  # pylint: disable=unused-variable
+        req2 = self.client().get('api/v1/entries/10', headers={"access-token":access_token})
+        self.assertEqual(req2.status_code, 404)
+        self.assertIn('fail', str(req2.data))
+
+    def test_for_unavailable_id_modification(self):
+        """ test for modification of an unavailable id """
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token})  # pylint: disable=unused-variable
+        req2 = self.client().put('api/v1/entries/50', data=self.entry_new, headers={"access-token":access_token})
+        self.assertEqual(req2.status_code, 404)
+        self.assertIn('fail', str(req2.data))
+
+    def test_for_delete_id_modification(self):
+        """ test for modification of an unavailable id """
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token})  # pylint: disable=unused-variable
+        req2 = self.client().delete('api/v1/entries/50', data=self.entry_new, headers={"access-token":access_token})
+        self.assertEqual(req2.status_code, 404)
 
     def test_landing_page_message(self):
         """ Test Landing page message"""
@@ -206,7 +234,7 @@ class TestDeletion(unittest.TestCase):
 
     def test_delete_fail_on_unavailable_id(self):
         """ Test for deletion on unavailable entry """
-        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":self.access_token})
+        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":self.access_token}) # pylint: disable=unused-variable
         delete_req = self.client().delete(self.unavailable_id_route, headers={"access-token":self.access_token})
         self.assertEqual(delete_req.status_code, 404)
 
