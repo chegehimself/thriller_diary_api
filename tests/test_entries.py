@@ -68,6 +68,14 @@ class TestDiaryEntry(unittest.TestCase):
         req_all = self.client().get(self.entry_route, headers={"access-token":access_token})
         self.assertEqual(req_all.status_code, 200)
         self.assertIn('At Russia', str(req_all.data))
+    def test_get_unavailable_entry(self):
+        """ test for request of unavailable entry """
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        req = self.client().get('api/v1/entries/5', headers={"access-token":access_token})
+        self.assertEqual(req.status_code, 404)
+        self.assertIn('fail', str(req.data))
 
     def test_entries_contains_nothing(self):
         """ Test fetch all entries """
