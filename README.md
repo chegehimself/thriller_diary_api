@@ -79,7 +79,8 @@ CREATE TABLE entries (
   owner_id integer NOT NULL
   );
 ```
-* ___Change the server credentials in db.py to match yours__ (_set `dbname = 'tests'` to run the tests_)
+* __Change the server credentials in db.py to match yours__ (_set `dbname = 'tests'` to run the tests_)
+
 __Start Server__
 ```py
 python run.py
