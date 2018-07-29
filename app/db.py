@@ -16,7 +16,7 @@ class Connection(object):
         # user=tkvjvlrggrkghq
         # password=d65251fe55f72480c2bcec57179f094140167876bd903fc90b36da69f24e8d50
 
-        """ connecting from the command line """
+        # connecting from the command line
         # psql -U tkvjvlrggrkghq -h ec2-50-16-241-91.compute-1.amazonaws.com  -p 5432 -d d5pkbo1rnnpott
         
         # local connection

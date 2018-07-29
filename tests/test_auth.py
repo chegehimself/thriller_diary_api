@@ -42,15 +42,17 @@ class TestAuth(unittest.TestCase):
         self.user_data_empty = {"email":""}
         self.user_data_invalid_username = {"username":"#$superman", "email":"superman@gmail.com", "password":"69mansuper"}
         self.user_short_password = {"username":"superman", "email":"superman@gmail.com", "password":"i"}
-        self.user_invalid_email = {"username":"superman", "email":"supermangmail.com", "password":"blackspear"}
+        self.user_invalid_email = {"username":"superman", "email":"supermangmailcom", "password":"blackspear"}
         self.user_data_invalid_email = {"username":"superman", "email":"supermangmail.com", "password":"69mansuper"}
         self.user_wrong_password = {"username":"thor", "email":"thor@gmail.com", "password":"verywrong"}
         req = self.client().post(self.register_route, data=self.user_data_empty)
-        req1 = self.client().post(self.login_route, data=self.user_data_empty) # pylint: disable=unused-variable
+        req1 = self.client().post(self.login_route, data=self.user_data_empty)
         req2 = self.client().post(self.register_route, data=self.user_data_invalid_email)
         req3 = self.client().post(self.register_route, data=self.user_data_invalid_username)
         req4 = self.client().post(self.register_route, data=self.user_short_password)
         req5 = self.client().post(self.login_route, data=self.user_wrong_password)
+        req6 = self.client().post(self.login_route, data=self.user_data_invalid_email)
+        req7 = self.client().post(self.login_route, data=self.user_short_password)
         self.assertEqual(req4.status_code, 401)
         self.assertIn('short', str(req4.data))
         self.assertEqual(req1.status_code, 401)
@@ -63,4 +65,8 @@ class TestAuth(unittest.TestCase):
         self.assertIn('Check your details', str(req.data))
         self.assertEqual(req5.status_code, 401)
         self.assertIn('Oops!', str(req5.data))
+        self.assertEqual(req6.status_code, 401)
+        self.assertIn('Invalid email', str(req6.data))
+        self.assertEqual(req7.status_code, 401)
+        self.assertIn('short password', str(req7.data))
        
