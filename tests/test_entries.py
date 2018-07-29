@@ -76,6 +76,24 @@ class TestDiaryEntry(unittest.TestCase):
         req = self.client().get('api/v1/entries/5', headers={"access-token":access_token})
         self.assertEqual(req.status_code, 404)
         self.assertIn('fail', str(req.data))
+    
+    def test_put_when_entries_empty(self):
+        """ test for request of unavailable entry """
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        req = self.client().put('api/v1/entries/5', data=self.entry_new, headers={"access-token":access_token})
+        self.assertEqual(req.status_code, 404)
+        self.assertIn('fail', str(req.data))
+
+    def test_delete_when_entries_empty(self):
+        """ test for request of unavailable entry """
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        req = self.client().delete('api/v1/entries/5', headers={"access-token":access_token})
+        self.assertEqual(req.status_code, 404)
+        self.assertIn('fail', str(req.data))
 
     def test_entries_contains_nothing(self):
         """ Test fetch all entries """
