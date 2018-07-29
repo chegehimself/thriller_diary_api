@@ -88,17 +88,13 @@ This is the signup route
       403:
         description: Method is not allowed
 """
-    user_email = request.data.get('email', '').strip()
-    user_password = request.data.get('password', '').strip()
-    username = request.data.get('username', '').strip()
+    user_email = request.data.get('email', '')
+    user_password = request.data.get('password', '')
+    username = request.data.get('username', '')
 
     # check for empty input
-    if not user_email:
-        return {"status": "fail", "Message": "Please input your email"}, 401
-    if not user_password:
-        return {"status": "fail", "Message": "Check your password and try again"}, 401 
-    if not username:
-        return {"status": "fail", "Message": "Check your username and try again"}, 401
+    if not user_email or not user_password or not username:
+        return {"status": "fail", "Message": "Check your details and try again"}, 401
     # check username
     the_username = username.lower()
     if not re.match(r"^[a-z0-9_]*$", the_username):
@@ -125,11 +121,6 @@ This is the signup route
     # ACCOUNT.register_user(email, password)
     response = {"status": "success", "Registered": {"Email":str(user_email), "Username":str(username)}}
     return response, 201
-
-# @AUTH.route('/users', methods=['GET'])
-# def all_users():
-#     response = {"status": "success", "users": ACCOUNT.all_users()}
-#     return response, 200
 
 @AUTH.route('/login', methods=['POST'])
 def login():
@@ -166,22 +157,25 @@ This is the sign-in route
       403:
         description: Method is not allowed
     """
-    user_email = str(request.data.get('email', ''))
-    user_password = str(request.data.get('password', ''))
+    user_email = str(request.data.get('email', '').strip())
+    user_password = str(request.data.get('password', '').strip())
     # check if the submited data
-    if not user_email:
-        return jsonify({"status": "fail", "Message": "Please Provide a Password"}), 401
-    if not user_password:
-        return jsonify({"status": "fail", "Message": "Please Provide a Password"}), 401
+    if not user_email or not user_password:
+        return {"status": "fail", "Message": "Check your details and try again"}, 401
+    # check password length
+    if len(user_password) < 4:
+        return {"status": "fail", "Message": "Too short password(at least 4 characters needed)"}, 401
+    # check email validity
+    if not re.match(r"(^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-z]+$)", user_email):
+        return {"status": "fail", "Message": "Invalid email.Try again"}, 401
     # check user existense
     checker = db.cursor()
-    checker.execute("SELECT id, username, email, password FROM users")
-    for user in checker.fetchall():
-        if user_email == user[2]:
-            if check_password_hash(user[3], user_password):
-                
-                token = jwt.encode({'user_id' : user[0], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, 'shark')
-                return jsonify({'token' : token.decode('UTF-8')})
-                # session["pulic_id"] = user[0]
-                # return {"status": "success", "Message": "Login successful"}, 200
-            return {"status":"fail", "message":"Oops! check your details and try again"}, 401
+    checker.execute("SELECT * FROM users")
+    found_user = [user for user in checker.fetchall() if user[2] == user_email]
+    if len(found_user) == 0:
+          return {"status":"fail", "message":"You are not registered"}, 404
+    elif check_password_hash(found_user[0][3], user_password):       
+        token = jwt.encode({'user_id' : found_user[0][0], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, 'shark')
+        return jsonify({'token' : token.decode('UTF-8')}), 200     
+    else:
+      return {"status":"fail", "message": "Oops! check your details and try again"}, 401

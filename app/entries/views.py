@@ -130,7 +130,7 @@ This is the route adds a new entry
         return response, 401
     # title = json_data['title']
     # description = json_data['description']
-    ENTRY.add_entry(title, description, current_user   )
+    ENTRY.add_entry(title, description, current_user)
     response = {"status": "success", "entry": {"title":str(title), "description":str(description)}}
     return response, 201
 
@@ -168,24 +168,23 @@ This is the route fetches specified entry
     # if there are no entries there is no need to do anything
     # if not ENTRIES:
     #     return {"status": "Fail", "entry": {"Error":"That entry does not exist!"}}, 404
-    
     cur = db.cursor()
     cur.execute("SELECT * FROM entries")
     certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-    for entry in certain_user_entries:
-        # check if the entry exists and return
-        if entry[0] == id_entry:
-            title = entry[1]
-            description = entry[3]
-            date_created = entry[2]
-            entry_id = entry[0]
-            response = {
-                "status": "success", "entry": {"id":entry_id,
-                                                "title":str(title),
-                                                "description":str(description),
-                                                "created":date_created
-                                                }}
-            return response, 200
+    if len(certain_user_entries) == 0:
+      return {"status":"fail", "message":"you don't have such an entry"}
+    if certain_user_entries[0][0] != id_entry:
+        return {"status":"fail", "message":"tha is not one of your entries fetch all to see your entries' ids"}
+    else:
+        entry_id = certain_user_entries[0][0]
+        title = certain_user_entries[0][1]
+        date_created = certain_user_entries[0][2]
+        description = certain_user_entries[0][3]
+        response = {"status": "success", "entry": {"id":entry_id,
+                                            "title":str(title),
+                                            "description":str(description),
+                                            "created":date_created}}
+        return response, 200
 @ENT_BP.route('/entries/<int:id_entry>', methods=['PUT'])
 @token_required
 def update_single_entry(current_user, id_entry):
@@ -230,6 +229,7 @@ This is the route modifies an new entry
 """
 
     """ Edits a single entry """
+    """ Edits a single entry """
     # if there are no entries there is no need to do anything
     # if not ENTRIES:
     #     return {"status": "Fail", "entry": {"Error":"That entry does not exist!"}}, 404
@@ -253,6 +253,10 @@ This is the route modifies an new entry
     cur = db.cursor()
     cur.execute("SELECT * FROM entries")
     certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
+    if len(certain_user_entries) == 0:
+      return {"status":"fail", "message":"you don't have such an entry"}
+    if certain_user_entries[0][0] != id_entry:
+        return {"status":"fail", "message":"tha is not one of your entries fetch all to see your entries' ids"}
     for entry in certain_user_entries:
         # update the entry
         query = "UPDATE entries SET description=(%s), title=(%s) WHERE id = (%s)"
@@ -263,6 +267,7 @@ This is the route modifies an new entry
             "status": "success",
             "entry": {"Message":"Updated successfully"}}
         return response, 201
+
 @ENT_BP.route('entries/<int:id_entry>', methods=["DELETE"])
 @token_required
 def delete_entry(current_user, id_entry):
@@ -296,9 +301,10 @@ This is the route Deletes a specified entry
     cur = db.cursor()
     cur.execute("SELECT * FROM entries")
     certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-    for i in range (0, len(certain_user_entries)):
-        if certain_user_entries[i][4] == id_entry:
-            return {"status":"fail", "message":"That entry is not available"}
+    if len(certain_user_entries) == 0:
+      return {"status":"fail", "message":"you don't have such an entry"}
+    if certain_user_entries[0][0] != id_entry:
+        return {"status":"fail", "message":"tha is not one of your entries fetch all to see your entries' ids"}
     query = "DELETE from entries WHERE entries.id = (%s)"
     cur.execute(query, [id_entry])
     db.commit()
