@@ -30,7 +30,7 @@ __Set environment variable__
 
 * open the terminal and type the following commands to create the database and the required tables
 
-```s
+```sql
 - psql -U postgres
 
 - CREATE DATABASE thriller;
@@ -57,7 +57,7 @@ CREATE TABLE entries (
   ```
 
   * __Creating database for testing__
-```js
+```sql
 - psql -U postgres
 
 - CREATE DATABASE tests;
