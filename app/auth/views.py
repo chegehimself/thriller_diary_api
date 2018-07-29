@@ -44,7 +44,7 @@ def index():
             "Welcome":"Hey! welcome to thriller diary api"
             }]}
 
-        response = {"status": "success", "Message": welcome_message}
+        response = jsonify({"status": "success", "Message": welcome_message})
         return response, 200
 @AUTH.route('/signup', methods=['POST'])
 def user_registration():
