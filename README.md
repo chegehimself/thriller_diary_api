@@ -57,7 +57,7 @@ CREATE TABLE entries (
   ```
 
   * __Creating database for testing__
-```s
+```js
 - psql -U postgres
 
 - CREATE DATABASE tests;
