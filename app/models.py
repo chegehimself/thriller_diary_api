@@ -51,10 +51,6 @@ def token_required(func):
         
         if 'access-token' in request.headers:
             token = request.headers['access-token']
-
-        if not token:
-            return jsonify({'message' : 'Please provide a token', 'token' : request.headers}), 401
-
         try:
             data = jwt.decode(token, 'shark')
             current_user = data['user_id']
