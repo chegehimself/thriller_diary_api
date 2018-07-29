@@ -42,11 +42,6 @@ class Entry(object):
             # return true
             return 1
 
-    def all_entries(self):
-        """Return available entries"""
-
-        return self.entries
-
 def token_required(func):
     @wraps(func)
     def decorated(*args, **kwargs):

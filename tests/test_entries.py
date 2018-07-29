@@ -98,6 +98,18 @@ class TestDiaryEntry(unittest.TestCase):
         """ Test Landing page message"""
         req = self.client().get('/api/v1/auth')
         self.assertEqual(req.status_code, 200)
+    def test_no_access_toke_provide(self):
+        """ Test token no token provided"""
+        req = self.client().get('/api/v1/entries')
+        self.assertEqual(req.status_code, 401)
+    def test_invalid_token(self):
+        """ test invalid token"""
+        req = self.client().get('/api/v1/entries', headers={"access-token":"invalid_access_token"})
+        self.assertEqual(req.status_code, 401)
+    def test_empty_token(self):
+        """ test empty token"""
+        req = self.client().get('/api/v1/entries', headers={"access-token":None})
+        self.assertEqual(req.status_code, 401)
 
     def test_fetch_single_entry(self):
         """ Test fetch single entry """
@@ -190,12 +202,3 @@ class TestDeletion(unittest.TestCase):
         delete_req = self.client().delete(self.unavailable_id_route, headers={"access-token":self.access_token})
         self.assertEqual(delete_req.status_code, 404)
 
-class TestProductionError(unittest.TestCase):
-    """Test Server error in production environemnt"""
-    def setUp(self):
-        self.app = create_app(config_name="production")
-        self.client = self.app.test_client
-    def test_error_500(self):
-        """ Test for server error"""
-        req = self.client().put('/api/v1/entries/1')
-        self.assertEqual(req.status_code, 500)

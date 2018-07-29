@@ -17,8 +17,6 @@ from app.db import Connection
 conn = Connection()
 
 db = conn.db_return()
-# call all available entries
-ENTRIES = ENTRY.all_entries()
 
 # create entries and a single entry Blueprint and
 # version the urls to have '/api/v1' prefix
