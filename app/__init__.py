@@ -9,6 +9,7 @@ from instance.config import APP_CONFIG
 from app.models import Entry
 from . entries.views import ENTRIES_BP, ENT_BP
 from . auth.views import AUTH
+from . users.profile import USERS_BP
 
 def create_app(config_name):
     """ creates the app with the desired environment """
@@ -29,6 +30,8 @@ def create_app(config_name):
     app.register_blueprint(ENTRIES_BP)
     app.register_blueprint(ENT_BP)
     app.register_blueprint(AUTH)
+    app.register_blueprint(USERS_BP)
+
 
     # @app.route('/documentation', methos=['GET'])
     # def docs():

@@ -1,13 +1,10 @@
 from flask import request, Blueprint
-
 from werkzeug.security import generate_password_hash, check_password_hash
-
 from app.models import token_required
-
+from flasgger import Swagger
+from flasgger.utils import swag_from
 from app.db import Connection
-
 conn = Connection()
-
 db = conn.db_return()
 
 # regester user blueprint
@@ -16,6 +13,7 @@ USERS_BP = Blueprint('users', __name__, url_prefix='/api/v1/users')
 
 @USERS_BP.route('/profile', methods=["GET"])
 @token_required
+@swag_from('/docs/user_info.yml')
 def profile(current_user):
     """ retrive user details """
     cur = db.cursor()
@@ -26,6 +24,7 @@ def profile(current_user):
 
 @USERS_BP.route('/change_password', methods=["PUT"])
 @token_required
+@swag_from('/docs/change_password.yml')
 def change_password(current_user):
     """ modify user password """
     old_password = str(request.data.get('old_password', '')).strip()
