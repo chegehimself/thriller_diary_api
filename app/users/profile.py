@@ -91,7 +91,7 @@ This route updates user's password
     new_password = str(request.data.get('new_password', ''))
     confirmation = str(request.data.get('confirmation', ''))
     if not old_password or not new_password or not confirmation:
-        return "please input all the fields"
+        return {"status":"fail","message":"please input all the fields"}, 401
     cur = db.cursor()
     cur.execute("SELECT * FROM users")
     certain_user = [user for user in cur.fetchall() if user[0] == current_user]
