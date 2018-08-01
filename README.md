@@ -39,7 +39,7 @@ __Set environment variable__
 * Set the database configuration variables.
 
 ```
-export DATABASE="thriller
+export DATABASE="thriller"
 export PASSWORD="your postgres user password"
 ```
 
