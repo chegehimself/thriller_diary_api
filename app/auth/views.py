@@ -55,23 +55,9 @@ def user_registration():
     # check email validity
     if not re.match(r"(^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-z]+$)", user_email):
         return {"status": "fail", "Message": "Invalid email.Try again"}, 401
-    db = conn.db_return()
-    checker = db.cursor()
-    checker.execute("SELECT username, email FROM users")
-    for user in checker.fetchall():
-        # if username == user[0]:
-        #     return {"status": "fail", "message" : "user exists"}, 409
-        if user_email == user[1]:
-            return {"status": "fail", "message" : "user exists"}, 409
-
-    cur = db.cursor()
-    query = "INSERT INTO users (email, password, username) VALUES (%s, %s, %s)"
-    hashed_password = generate_password_hash(user_password, method='sha256')
-    data = (user_email, hashed_password, username)
-    cur.execute(query, data)
-    db.commit()
-    response = {"status": "success", "Registered": {"Email":str(user_email), "Username":str(username)}}
-    return response, 201
+    return USER.register_user(username, user_email, user_password)
+    # for i in response:
+    #     return response, 201
 
 @AUTH.route('/login', methods=['POST'])
 @swag_from('/docs/login.yml')
@@ -87,14 +73,4 @@ def login():
     # check email validity
     if not re.match(r"(^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-z]+$)", user_email):
         return {"status": "fail", "Message": "Invalid email.Try again"}, 401
-    db = conn.db_return()
-    checker = db.cursor()
-    checker.execute("SELECT * FROM users")
-    found_user = [user for user in checker.fetchall() if user[2] == user_email]
-    if len(found_user) == 0:
-        return {"status":"fail", "message":"Oops! check your details and try again"}, 404
-    elif check_password_hash(found_user[0][3], user_password):        
-        token = jwt.encode({'user_id' : found_user[0][0], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=300)}, 'shark')
-        return jsonify({'token' : token.decode('UTF-8')}), 200  
-    else:
-        return {"status":"fail", "message": "Oops! check your details and try again"}, 401
+    return USER.login_user(user_email, user_password)

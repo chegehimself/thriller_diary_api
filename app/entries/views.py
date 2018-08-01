@@ -35,11 +35,7 @@ ENT_BP = Blueprint('ent', __name__, url_prefix='/api/v1')
 def get_all_entries(current_user):
     """Retrives all Entries"""
     if request.method == 'GET':
-        cur = db.cursor()
-        cur.execute("SELECT * FROM entries")
-        certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-        response = {"status": "success", "Entries": certain_user_entries}
-        return response, 200
+        return ENTRY.all_entries(current_user)
 
 @ENTRIES_BP.route('/entries', methods=['POST'])
 @token_required
@@ -70,22 +66,7 @@ def add_new_entry(current_user):
 @swag_from('/docs/get_single.yml')
 def fetch_single_entry(current_user, id_entry):
     """ will return a single entry """
-    cur = db.cursor()
-    cur.execute("SELECT * FROM entries")
-    certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-    entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
-    if len(entries_user) == 0:
-        return {"status":"fail", "message":"entry unavailable"}, 404
-    else:
-        entry_id = entries_user[0][0]
-        title = entries_user[0][1]
-        date_created = entries_user[0][2]
-        description = entries_user[0][3]
-        response = {"status": "success", "entry": {"id":entry_id,
-                                                    "title":str(title),
-                                                    "description":str(description),
-                                                    "created":date_created}}
-        return response, 200
+    return ENTRY.return_single_entry(current_user, id_entry)
 
 @ENT_BP.route('/entries/<int:id_entry>', methods=['PUT'])
 @token_required
@@ -106,38 +87,11 @@ def update_single_entry(current_user, id_entry):
     if not re.match(r"^[a-zA-Z0-9_ -]*$", title):
         response = {"message": "Please input valid title", "status": 401}
         return response, 401
-    cur = db.cursor()
-    cur.execute("SELECT * FROM entries")
-    certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-    entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
-    if len(entries_user) == 0:
-        return {"status":"fail", "message":"entry not found"}, 404
-    for entry in certain_user_entries:
-        # update the entry
-        query = "UPDATE entries SET description=(%s), title=(%s) WHERE id = (%s)"
-        data = (description, title, id_entry)
-        cur.execute(query, data)
-        db.commit()
-        response = {
-            "status": "success",
-            "entry": {"Message":"Updated successfully"}}
-        return response, 201
+    return ENTRY.edit_entry(current_user, id_entry, description, title)
 
 @ENT_BP.route('entries/<int:id_entry>', methods=["DELETE"])
 @token_required
 @swag_from('/docs/delete.yml')
 def delete_entry(current_user, id_entry):
-    cur = db.cursor()
-    cur.execute("SELECT * FROM entries")
-    certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-    entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
-    if len(entries_user) == 0:
-        return {"status":"fail", "message":"entry not found"}, 404
-    query = "DELETE from entries WHERE entries.id = (%s)"
-    cur.execute(query, [id_entry])
-    db.commit()
-    response = {
-        "status":"success",
-        "Deleted":{"id":id_entry}
-    }
-    return response, 200
+    """ get rid of an entry """
+    return ENTRY.delete_entry(current_user, id_entry)
