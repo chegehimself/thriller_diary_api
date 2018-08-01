@@ -108,7 +108,7 @@ def update_single_entry(current_user, id_entry):
     certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
     entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
     if len(entries_user) == 0:
-      return {"status":"fail", "message":"entry unavailable"}, 404
+      return {"status":"fail", "message":"entry not found"}, 404
     for entry in certain_user_entries:
         # update the entry
         query = "UPDATE entries SET description=(%s), title=(%s) WHERE id = (%s)"
@@ -127,10 +127,9 @@ def delete_entry(current_user, id_entry):
     cur = db.cursor()
     cur.execute("SELECT * FROM entries")
     certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-    if len(certain_user_entries) == 0:
-      return {"status":"fail", "message":"you don't have such an entry"}, 404
-    if certain_user_entries[0][0] != id_entry:
-        return {"status":"fail", "message":"tha is not one of your entries fetch all to see your entries' ids"}, 404
+    entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
+    if len(entries_user) == 0:
+      return {"status":"fail", "message":"entry not found"}, 404
     query = "DELETE from entries WHERE entries.id = (%s)"
     cur.execute(query, [id_entry])
     db.commit()
