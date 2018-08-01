@@ -28,58 +28,14 @@ __Set environment variable__
 # setup Database
 * make sure you have [__postgresql__](https://www.postgresql.org/download/linux/ubuntu/) installed and running properly.
 
-* open the terminal and type the following commands to create the database and the required tables
+* Change the connection details in `db.py` and `create_db.py` to match yours.
 
-```sql
-- psql -U postgres
+On the root folder of this project run __`python create_db.py`__ to create database for the Api.
 
-- CREATE DATABASE thriller;
 
-- \connect thriller
+* __Creating database for testing__
+To create database for testing, run __`python create_test_db.py`__.
 
- CREATE TABLE users (
-  ID serial PRIMARY KEY,
-  username VARCHAR (255) NOT NULL,
-  email VARCHAR (255) NOT NULL,
-  password VARCHAR (255)
-  );
-
-CREATE TABLE entries (
-  ID serial PRIMARY KEY,
-  title VARCHAR (255) NOT NULL,
-  date_created VARCHAR (255) NOT NULL,
-  description VARCHAR (255) NOT NULL,
-  owner_id integer NOT NULL,
-  CONSTRAINT users_id_fkey FOREIGN KEY (id)
-      REFERENCES users (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
-  );
-  ```
-
-  * __Creating database for testing__
-```sql
-- psql -U postgres
-
-- CREATE DATABASE tests;
-
-- \connect tests
-
- CREATE TABLE users (
-  ID integer DEFAULT 1,
-  username VARCHAR (255) NOT NULL,
-  email VARCHAR (255) NOT NULL,
-  password VARCHAR (255)
-  );
-
-CREATE TABLE entries (
-  ID integer DEFAULT 1,
-  title VARCHAR (255) NOT NULL,
-  date_created VARCHAR (255) NOT NULL,
-  description VARCHAR (255) NOT NULL,
-  owner_id integer NOT NULL
-  );
-```
-* __Change the server credentials in `db.py` to match yours__ (_set `dbname = 'tests'` to run the tests_)
 
 __Start Server__
 ```py
