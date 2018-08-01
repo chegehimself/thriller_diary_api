@@ -26,18 +26,6 @@ ENTRIES_BP = Blueprint('entries', __name__, url_prefix='/api/v1')
 # deal with single entry
 ENT_BP = Blueprint('ent', __name__, url_prefix='/api/v1')
 
-# @ENTRIES_BP.route('/', methods=['GET'])
-# def index():
-#     if request.method == 'GET':
-
-#         # the following is a welcoming message (at the landing page)
-#         welcome_message = {"Message": [{
-#             "Welcome":"Hey! welcome to thriller diary api"
-#             }]}
-
-#         response = {"status": "success", "Message": welcome_message}
-#         return response, 200
-
 @ENTRIES_BP.route('/entries', methods=['GET'])
 @token_required
 @swag_from('/docs/get_entries.yml')
@@ -70,8 +58,6 @@ def add_new_entry(current_user):
     if not re.match(r"^[a-zA-Z0-9_ -]*$", title):
         response = {"message": "Please input valid title", "status": 401}
         return response, 401
-    # title = json_data['title']
-    # description = json_data['description']
     ENTRY.add_entry(title, description, current_user)
     response = {"status": "success", "entry": {"title":str(title), "description":str(description)}}
     return response, 201
@@ -81,9 +67,6 @@ def add_new_entry(current_user):
 @swag_from('/docs/get_single.yml')
 def fetch_single_entry(current_user, id_entry):
     """ will return a single entry """
-    # if there are no entries there is no need to do anything
-    # if not ENTRIES:
-    #     return {"status": "Fail", "entry": {"Error":"That entry does not exist!"}}, 404
     cur = db.cursor()
     cur.execute("SELECT * FROM entries")
     certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
@@ -107,12 +90,6 @@ def fetch_single_entry(current_user, id_entry):
 @swag_from('/docs/modify.yml')
 def update_single_entry(current_user, id_entry):
     """ Edits a single entry """
-    # if there are no entries there is no need to do anything
-    # if not ENTRIES:
-    #     return {"status": "Fail", "entry": {"Error":"That entry does not exist!"}}, 404
-    # for entry in ENTRIES:
-    #     # check if the entry exists
-    #     if entry['id'] == id_entry:
     title = str(request.data.get('title', '')).strip()
     description = str(request.data.get('description', ''))
     # check for empty title

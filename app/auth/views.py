@@ -74,11 +74,6 @@ def user_registration():
     response = {"status": "success", "Registered": {"Email":str(user_email), "Username":str(username)}}
     return response, 201
 
-# @AUTH.route('/users', methods=['GET'])
-# def all_users():
-#     response = {"status": "success", "users": ACCOUNT.all_users()}
-#     return response, 200
-
 @AUTH.route('/login', methods=['POST'])
 @swag_from('/docs/login.yml')
 def login():

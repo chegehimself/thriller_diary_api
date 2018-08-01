@@ -57,12 +57,4 @@ class TestDiaryEntry(unittest.TestCase):
         req_info = self.client().get(self.users_route, headers={"access-token":access_token})
         self.assertEqual(req_info.status_code, 200)
         self.assertIn('success', str(req_info.data))
-
-    # def test_user_change_password(self):
-    #     """ test user change password """
-    #     self.register_user
-    #     result = self.login_user()
-    #     # access token
-    #     access_token = json.loads(result.data.decode())['token']
-    #     req_reset = self.client().post(self.users_route, data=self.correct_credentials, headers={"access-token":access_token})
-    #     self.assertEqual(req_reset.status_code, 201)
+        
