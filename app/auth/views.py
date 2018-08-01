@@ -55,7 +55,21 @@ def user_registration():
     # check email validity
     if not re.match(r"(^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-z]+$)", user_email):
         return {"status": "fail", "Message": "Invalid email.Try again"}, 401
-    USER.register_user(username, user_email, user_password)
+    db = conn.db_return()
+    checker = db.cursor()
+    checker.execute("SELECT username, email FROM users")
+    for user in checker.fetchall():
+        # if username == user[0]:
+        #     return {"status": "fail", "message" : "user exists"}, 409
+        if user_email == user[1]:
+            return {"status": "fail", "message" : "user exists"}, 409
+
+    cur = db.cursor()
+    query = "INSERT INTO users (email, password, username) VALUES (%s, %s, %s)"
+    hashed_password = generate_password_hash(user_password, method='sha256')
+    data = (user_email, hashed_password, username)
+    cur.execute(query, data)
+    db.commit()
     response = {"status": "success", "Registered": {"Email":str(user_email), "Username":str(username)}}
     return response, 201
 
@@ -73,7 +87,10 @@ def login():
     # check email validity
     if not re.match(r"(^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-z]+$)", user_email):
         return {"status": "fail", "Message": "Invalid email.Try again"}, 401
-    found_user = USER.search_user(user_email)
+    db = conn.db_return()
+    checker = db.cursor()
+    checker.execute("SELECT * FROM users")
+    found_user = [user for user in checker.fetchall() if user[2] == user_email]
     if len(found_user) == 0:
         return {"status":"fail", "message":"Oops! check your details and try again"}, 404
     elif check_password_hash(found_user[0][3], user_password):        

@@ -35,58 +35,12 @@ class Entry(object):
             # return true
             return True
 
-    def return_single_entry(self, current_user, id_entry):
-        """ returns a single entry """
-        cur = self.db.cursor()
-        cur.execute("SELECT * FROM entries")
-        certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-        entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
-        if len(entries_user) == 0:
-            return {"status":"fail", "message":"entry unavailable"}, 404
-        else:
-            entry_id = entries_user[0][0]
-            title = entries_user[0][1]
-            date_created = entries_user[0][2]
-            description = entries_user[0][3]
-            response = {"status": "success", "entry": {"id":entry_id,
-                                                       "title":str(title),
-                                                       "description":str(description),
-                                                       "created":date_created}}
+    # def return_single_entry(self, current_user, id_entry):
+    #     """ returns a single entry """
+        
 
-    def edit_entry(self, current_user, id_entry, description, title):
-        """  edits an entry   """
-        cur = self.db.cursor()
-        cur.execute("SELECT * FROM entries")
-        certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-        entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
-        if len(entries_user) == 0:
-            return {"status":"fail", "message":"entry not found"}, 404
-        for entry in certain_user_entries:
-            # update the entry
-            query = "UPDATE entries SET description=(%s), title=(%s) WHERE id = (%s)"
-            data = (description, title, id_entry)
-            cur.execute(query, data)
-            self.db.commit()
-            response = {
-                "status": "success",
-                "entry": {"Message":"Updated successfully"}}
-
-    def delete_an_entry(self, current_user, id_entry):
-        """ deletes an entry """
-        cur = self.db.cursor()
-        cur.execute("SELECT * FROM entries")
-        certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-        entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
-        if len(entries_user) == 0:
-            return {"status":"fail", "message":"entry not found"}, 404
-        query = "DELETE from entries WHERE entries.id = (%s)"
-        cur.execute(query, [id_entry])
-        self.db.commit()
-        response = {
-            "status":"success",
-            "Deleted":{"id":id_entry}
-        }
-        response, 200
+    # def edit_entry(self, current_user, id_entry, description, title):
+    #     """  edits an entry   """
 
 def token_required(func):
     """ decorated function for toke required """
@@ -126,9 +80,15 @@ class User(object):
         cur.execute(query, data)
         self.db.commit()
 
-    def search_user(self, user_email):
-        self.db = conn.db_return()
-        checker = self.db.cursor()
-        checker.execute("SELECT * FROM users")
-        found_user = [user for user in checker.fetchall() if user[2] == user_email]
-        return found_user
+    def check_existense(self, username, user_email, user_password):
+        """ check if a user exists """
+        
+
+    # def search_user(self, user_email):
+    #     self.db = conn.db_return()
+    #     checker = self.db.cursor()
+    #     checker.execute("SELECT * FROM users")
+    #     found_user = [user for user in checker.fetchall() if user[2] == user_email]
+    #     return found_user
+
+    

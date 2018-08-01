@@ -190,7 +190,7 @@ class TestDiaryEntry(unittest.TestCase):
         # an entry that does not belong to the user
         req5 = self.client().put('api/v1/entries/2', data=self.entry_new, headers={"access-token":access_token})
         self.assertEqual(req5.status_code, 404)
-        self.assertIn('not one of your entries', str(req5.data))
+        self.assertIn('not found', str(req5.data))
         self.assertEqual(req2.status_code, 401)
         self.assertEqual(req3.status_code, 401)
         self.assertEqual(req4.status_code, 401)
