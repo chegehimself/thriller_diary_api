@@ -94,13 +94,11 @@ def token_required(func):
     @wraps(func)
     def decorated(*args, **kwargs):
         token = None
-
+        if not 'access-token' in request.headers:
+            return jsonify({"status":"fail", 'message' : 'Please provide a token'}), 401
+        
         if 'access-token' in request.headers:
             token = request.headers['access-token']
-
-        if not token:
-            return jsonify({'message' : 'Please provide a token', 'token' : request.headers}), 401
-
         try:
             data = jwt.decode(token, 'shark')
             current_user = data['user_id']
