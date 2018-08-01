@@ -68,7 +68,14 @@ This gets all diary entries
         cur = db.cursor()
         cur.execute("SELECT * FROM entries")
         certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-        response = {"status": "success", "Entries": certain_user_entries}
+        all_entries = []
+        for entry in certain_user_entries:
+          dict_entries = {}
+          dict_entries['id'] = entry[0]
+          dict_entries['tittle'] = entry[1]
+          dict_entries['description'] = entry[3]
+          all_entries.append(dict_entries)
+        response = {"status": "success", "Entries": all_entries}
         return response, 200
 
 @ENTRIES_BP.route('/entries', methods=['POST'])
