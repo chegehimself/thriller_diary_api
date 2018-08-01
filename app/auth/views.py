@@ -2,8 +2,11 @@
 app/auth/views.py
 """
 import re
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
+import datetime
 from flasgger.utils import swag_from
+import jwt
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # authentication blueprint
 
@@ -14,6 +17,10 @@ AUTH = Blueprint('authentication', __name__, url_prefix='/api/v1/auth')
 from app.models import User
 
 USER = User()
+
+from app.db import Connection
+conn = Connection()
+db = conn.db_return()
 
 @AUTH.route('/', methods=['GET'])
 @swag_from('/docs/index.yml')
@@ -66,7 +73,11 @@ def login():
     # check email validity
     if not re.match(r"(^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-z]+$)", user_email):
         return {"status": "fail", "Message": "Invalid email.Try again"}, 401
-    elif user_email:
-        USER.login_user(user_email, user_password)
+    found_user = USER.search_user(user_email)
+    if len(found_user) == 0:
+        return {"status":"fail", "message":"Oops! check your details and try again"}, 404
+    elif check_password_hash(found_user[0][3], user_password):        
+        token = jwt.encode({'user_id' : found_user[0][0], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=300)}, 'shark')
+        return jsonify({'token' : token.decode('UTF-8')}), 200  
     else:
         return {"status":"fail", "message": "Oops! check your details and try again"}, 401

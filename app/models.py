@@ -126,14 +126,9 @@ class User(object):
         cur.execute(query, data)
         self.db.commit()
 
-    def login_user(self, user_email, user_password):
-        """ Logs in an existing user """
-         # check user existense
+    def search_user(self, user_email):
+        self.db = conn.db_return()
         checker = self.db.cursor()
         checker.execute("SELECT * FROM users")
         found_user = [user for user in checker.fetchall() if user[2] == user_email]
-        if len(found_user) == 0:
-            return {"status":"fail", "message":"You are not registered"}, 404
-        elif check_password_hash(found_user[0][3], user_password):        
-            token = jwt.encode({'user_id' : found_user[0][0], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=300)}, 'shark')
-            return jsonify({'token' : token.decode('UTF-8')}), 200     
+        return found_user
