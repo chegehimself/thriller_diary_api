@@ -179,9 +179,9 @@ This route fetches specified entry
     cur.execute("SELECT * FROM entries")
     certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
     if len(certain_user_entries) == 0:
-      return {"status":"fail", "message":"you don't have such an entry"}
+      return {"status":"fail", "message":"entry not found"}, 404
     if certain_user_entries[0][0] != id_entry:
-        return {"status":"fail", "message":"tha is not one of your entries fetch all to see your entries' ids"}
+        return {"status":"fail", "message":"entry not found"}, 404
     else:
         entry_id = certain_user_entries[0][0]
         title = certain_user_entries[0][1]
@@ -263,7 +263,7 @@ This route modifies an new entry
     if len(certain_user_entries) == 0:
       return {"status":"fail", "message":"you don't have such an entry"}
     if certain_user_entries[0][0] != id_entry:
-        return {"status":"fail", "message":"tha is not one of your entries fetch all to see your entries' ids"}
+        return {"status":"fail", "message":"entry not found"}
     for entry in certain_user_entries:
         # update the entry
         query = "UPDATE entries SET description=(%s), title=(%s) WHERE id = (%s)"
@@ -311,7 +311,7 @@ This route Deletes a specified entry
     if len(certain_user_entries) == 0:
       return {"status":"fail", "message":"you don't have such an entry"}
     if certain_user_entries[0][0] != id_entry:
-        return {"status":"fail", "message":"tha is not one of your entries fetch all to see your entries' ids"}
+        return {"status":"fail", "message":"entry not found"}
     query = "DELETE from entries WHERE entries.id = (%s)"
     cur.execute(query, [id_entry])
     db.commit()
