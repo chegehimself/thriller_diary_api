@@ -55,6 +55,9 @@ The following is a list of available endpoints in this application
 |GET api/v1/entries/<int:entryId> |fetch a single entry|
 |POST api/v1/entries |Add an entry|
 |PUT api/v1/entries/<int:entryId> |modify an entry|
+|DELETE api/v1/entries/<int:entryId> |Deletes a user's entry|
+|GET api/v1/users/profile/ |Retrieves logged in user's info|
+|PUT api/v1/users/change_password/ |Modifies user's password|
 
 # Testing
 py.test --cov=app
