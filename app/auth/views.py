@@ -95,7 +95,7 @@ def login():
     if len(found_user) == 0:
           return {"status":"fail", "message":"You are not registered"}, 404
     elif check_password_hash(found_user[0][3], user_password):        
-        token = jwt.encode({'user_id' : found_user[0][0], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, 'shark')
+        token = jwt.encode({'user_id' : found_user[0][0], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=300)}, 'shark')
         return jsonify({'token' : token.decode('UTF-8')}), 200     
     else:
       return {"status":"fail", "message": "Oops! check your details and try again"}, 401

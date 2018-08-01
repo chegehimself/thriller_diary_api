@@ -70,15 +70,14 @@ def fetch_single_entry(current_user, id_entry):
     cur = db.cursor()
     cur.execute("SELECT * FROM entries")
     certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-    if len(certain_user_entries) == 0:
+    entries_user = [an_entry for an_entry in certain_user_entries if an_entry[0] == id_entry]
+    if len(entries_user) == 0:
       return {"status":"fail", "message":"you don't have such an entry"}, 404
-    if certain_user_entries[0][0] != id_entry:
-        return {"status":"fail", "message":"that is not one of your entries fetch all to see your entries' ids"}, 404
     else:
-        entry_id = certain_user_entries[0][0]
-        title = certain_user_entries[0][1]
-        date_created = certain_user_entries[0][2]
-        description = certain_user_entries[0][3]
+        entry_id = entries_user[0][0]
+        title = entries_user[0][1]
+        date_created = entries_user[0][2]
+        description = entries_user[0][3]
         response = {"status": "success", "entry": {"id":entry_id,
                                             "title":str(title),
                                             "description":str(description),
