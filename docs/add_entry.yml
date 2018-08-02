@@ -4,10 +4,6 @@ This adds a new entry
     tags:
       - Routes
     parameters:
-      - in: header
-        name: access-token
-        required: true
-        type: string
       - in: body
         name: entry
         description: The entry
@@ -24,6 +20,8 @@ This adds a new entry
             description:
               type: string
               example: Me and my three friends decide to spend our saturday...
+    security:
+      - TokenHeader: []
     responses:
       500:
         description: Error There was a server error!

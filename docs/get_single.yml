@@ -4,15 +4,13 @@ This route fetches specified entry
     tags:
       - Routes
     parameters:
-      - in: header
-        name: access-token
-        required: true
-        type: string
       - in: path
         name: id_entry
         description: id of the entry
         required: true
         type: number    
+    security:
+        - TokenHeader: []
     responses:
       500:
         description: Error There was a server error!
