@@ -78,7 +78,8 @@ The following is a list of available endpoints in this application
 * __Creating database for testing__
 To create database for testing, run __`python create_test_db.py`__.
 
-`py.test --cov=app`
-
 * change the database name to tests
 `export DATABASE="tests"`
+
+* Finaly run the tests
+`py.test --cov=app`
