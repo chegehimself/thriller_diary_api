@@ -2,25 +2,18 @@
 app/views.py
 contains routes
 """
-from app.db import Connection
 import re
-import psycopg2
 
 from flask import Blueprint, request
+from flasgger.utils import swag_from
+
+
 
 from app.models import token_required
 
-from flasgger.utils import swag_from
 # import models
 from app.models import Entry, User
 ENTRY = Entry()
-
-
-CONN = Connection()
-
-db = CONN.db_return()
-
-user = User()
 
 # create entries and a single entry Blueprint and
 # version the urls to have '/api/v1' prefix

@@ -15,7 +15,6 @@ def create_app(config_name):
     """ creates the app with the desired environment """
     # instantiate flask app
     app = FlaskAPI(__name__, instance_relative_config=True)
-    
     # app settings config
     app.config.from_object(APP_CONFIG[config_name])
     app.config.from_pyfile('config.py')
