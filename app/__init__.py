@@ -15,7 +15,6 @@ def create_app(config_name):
     """ creates the app with the desired environment """
     # instantiate flask app
     app = FlaskAPI(__name__, instance_relative_config=True)
-    
     # app settings config
     app.config.from_object(APP_CONFIG[config_name])
     app.config.from_pyfile('config.py')
@@ -32,13 +31,6 @@ def create_app(config_name):
     app.register_blueprint(AUTH)
     app.register_blueprint(USERS_BP)
 
-
-    # @app.route('/documentation', methos=['GET'])
-    # def docs():
-    #     return 
-
-    # For the following functions pylint has been disabled only on variables and arguements
-    # It is Not necessary to use the variables or the argument
     @app.errorhandler(404)
     def error_404(error=None):  # pylint: disable=unused-variable
         # pylint: disable=unused-argument

@@ -32,6 +32,7 @@ class TestDiaryEntry(unittest.TestCase):
         self.single_entry_route = 'api/v1/entries/1'
         self.unavailable_id_route = 'api/v1/entries/300'
         self.bad_url = '/api/v1/entries/not_available'
+        self.single_entry_route1 = 'api/v1/entries/84'
 
         with self.app.app_context():
             cur = db.cursor()
@@ -152,18 +153,22 @@ class TestDiaryEntry(unittest.TestCase):
         """ Test Landing page message"""
         req = self.client().get('/api/v1/auth')
         self.assertEqual(req.status_code, 200)
+        self.assertIn('success', str(req.data))
     def test_no_access_toke_provide(self):
         """ Test token no token provided"""
         req = self.client().get('/api/v1/entries')
         self.assertEqual(req.status_code, 401)
+        self.assertIn('fail', str(req.data))
     def test_invalid_token(self):
         """ test invalid token"""
         req = self.client().get('/api/v1/entries', headers={"access-token":"invalid_access_token"})
         self.assertEqual(req.status_code, 401)
+        self.assertIn('token is invalid', str(req.data))
     def test_empty_token(self):
         """ test empty token"""
         req = self.client().get('/api/v1/entries', headers={"access-token":None})
         self.assertEqual(req.status_code, 401)
+        self.assertIn('Provided token is invalid', str(req.data))
 
     def test_fetch_single_entry(self):
         """ Test fetch single entry """
@@ -190,9 +195,10 @@ class TestDiaryEntry(unittest.TestCase):
         # an entry that does not belong to the user
         req5 = self.client().put('api/v1/entries/2', data=self.entry_new, headers={"access-token":access_token})
         self.assertEqual(req5.status_code, 404)
-        self.assertIn('not one of your entries', str(req5.data))
+        self.assertIn('not found', str(req5.data))
         self.assertEqual(req2.status_code, 401)
         self.assertEqual(req3.status_code, 401)
+        self.assertIn('input description', str(req3.data))
         self.assertEqual(req4.status_code, 401)
         self.assertEqual(req_single.status_code, 201)
         self.assertIn('success', str(req_single.data))
@@ -201,58 +207,40 @@ class TestDiaryEntry(unittest.TestCase):
         """ Test for unavailable url request """
         req = self.client().get(self.bad_url)
         self.assertEqual(req.status_code, 404)
+        self.assertIn('Was not found', str(req.data))
 
     def test_error_405(self):
         """ Test for Method Not allowed """
         req = self.client().post(self.single_entry_route)
         self.assertEqual(req.status_code, 405)
-
-class TestDeletion(unittest.TestCase):
-    """ To test deletions """
-    # login user
-    def register_user(self, username="thor", email="thor@gmail.com", password="thor"):
-        """register user."""
-        user_data = {
-            'username':username,
-            'email': email,
-            'password': password
-        }
-        return self.client().post('/api/v1/auth/signup', data=user_data)
-
-    def login_user(self, email="thor@gmail.com", password="thor"):
-        """login user."""
-        user_data = {
-            'email': email,
-            'password': password
-        }
-        return self.client().post('/api/v1/auth/login', data=user_data)
-
-    def setUp(self):
-        self.app = create_app(config_name="testing")
-        self.client = self.app.test_client
-        self.entry = {'title':'At Russia', 'description':'Me and my three friends decided ...'}
-        self.single_entry_route = 'api/v1/entries/84'
-        self.entry_route = 'api/v1/entries/'
-        self.unavailable_id_route = 'api/v1/entries/300'
-        self.register_user()
-        self.result = self.login_user()
-        self.access_token = json.loads(self.result.data.decode())['token']
+        self.assertIn('405', str(req.data))
 
     def test_deletion_on_empty_entries(self):
         """ Test for deletion on empty"""
-        req = self.client().delete(self.single_entry_route, headers={"access-token":self.access_token})
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        req = self.client().delete(self.single_entry_route1, headers={"access-token":access_token})
         self.assertEqual(req.status_code, 404)
+        self.assertIn('fail', str(req.data))
 
     def test_deletion_success(self):
         """ test for successful entry deletion """
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
         # Not neccessary to use the following variable so pylint unused variable warning is disabled
-        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":self.access_token}) # pylint: disable=unused-variable
-        delete_req = self.client().delete('api/v1/entries/1', headers={"access-token":self.access_token})
+        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token}) # pylint: disable=unused-variable
+        delete_req = self.client().delete('api/v1/entries/1', headers={"access-token":access_token})
         self.assertEqual(delete_req.status_code, 200)
-
+        self.assertIn('success', str(delete_req.data))
+        
     def test_delete_fail_on_unavailable_id(self):
         """ Test for deletion on unavailable entry """
-        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":self.access_token}) # pylint: disable=unused-variable
-        delete_req = self.client().delete(self.unavailable_id_route, headers={"access-token":self.access_token})
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token}) # pylint: disable=unused-variable
+        delete_req = self.client().delete(self.unavailable_id_route, headers={"access-token":access_token})
         self.assertEqual(delete_req.status_code, 404)
-
+        self.assertIn('fail', str(delete_req.data))
