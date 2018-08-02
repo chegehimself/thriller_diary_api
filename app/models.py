@@ -11,14 +11,14 @@ from functools import wraps
 from flask import request, jsonify
 
 from app.db import Connection
-conn = Connection()
+CONN = Connection()
 class Entry(object):
     """Add new entry"""
     # constructor
     def __init__(self):
         # all entries placeholder
         self.entries = []
-        self.db = conn.db_return()
+        self.db = CONN.db_return()
     def add_entry(self, title, description, current_user):
         """Adds new entries"""
 
@@ -101,6 +101,7 @@ def token_required(func):
     """ decorated function for toke required """
     @wraps(func)
     def decorated(*args, **kwargs):
+        """ assigns a token using the user id """
         token = None
         if not 'access-token' in request.headers:
             return jsonify({"status":"fail", 'message' : 'Please provide a token'}), 401
@@ -116,11 +117,11 @@ def token_required(func):
 
     return decorated
 
-class User(object): 
+class User(object):
     """ Handle user """
 
     def __init__(self):
-        self.db = conn.db_return()
+        self.db = CONN.db_return()
 
     def register_user(self, username, user_email, user_password):
         """ registers a  new user"""
@@ -138,7 +139,9 @@ class User(object):
         data = (user_email, hashed_password, username)
         cur.execute(query, data)
         self.db.commit()
-        response = {"status": "success", "Registered": {"Email":str(user_email), "Username":str(username)}}
+        response = {"status": "success", 
+            "Registered": {"Email":str(user_email), 
+                            "Username":str(username)}}
         return response, 201
     
     def login_user(self, user_email, user_password):

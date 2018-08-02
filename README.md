@@ -52,8 +52,9 @@ __Start Server__
 ```py
 python run.py
 ```
+__Access docs via http://127.0.0.1:5000/apidocs/#/ in your browser to send requests to the api__
 
-[__Use postman app to send request to app.__](https://www.getpostman.com/)
+You can also [__Use postman app to send request to the api.__](https://www.getpostman.com/)
 ### Endpoints
 
 The following is a list of available endpoints in this application
