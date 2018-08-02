@@ -69,6 +69,7 @@ class TestAuth(unittest.TestCase):
         self.assertIn('short password', str(req7.data))
 
     def test_empty_data(self):
+        """ test for empty data submission """
         self.user_data_empty = {"email":""}
         req = self.client().post(self.register_route, data=self.user_data_empty)
         req1 = self.client().post(self.login_route, data=self.user_data_empty)
