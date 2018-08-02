@@ -40,8 +40,9 @@ class Entry(object):
         cur.execute("SELECT * FROM entries")
         certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
         all_user_entries = []
-        single_entry_holder = {}
+        
         for user_entries in certain_user_entries:
+            single_entry_holder = {}
             single_entry_holder["id"] = user_entries[0]
             single_entry_holder["title"] = user_entries[1]
             single_entry_holder["date_created"] = user_entries[2]
