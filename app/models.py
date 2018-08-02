@@ -39,7 +39,16 @@ class Entry(object):
         cur = self.db.cursor()
         cur.execute("SELECT * FROM entries")
         certain_user_entries = [entry for entry in cur.fetchall() if entry[4] == current_user]
-        response = {"status": "success", "Entries": certain_user_entries}
+        all_user_entries = []
+        single_entry_holder = {}
+        for user_entries in certain_user_entries:
+            single_entry_holder["id"] = user_entries[0]
+            single_entry_holder["title"] = user_entries[1]
+            single_entry_holder["date_created"] = user_entries[2]
+            single_entry_holder["description"] = user_entries[3]
+            all_user_entries.append(single_entry_holder)
+
+        response = {"status": "success", "Entries": all_user_entries}
         return response, 200
 
     def return_single_entry(self, current_user, id_entry):
