@@ -41,6 +41,9 @@ __Set environment variable__
 ```
 export DATABASE="thriller"
 export PASSWORD="your postgres user password"
+export DATABASE="thriller"
+export USERNAME="postgres"
+export HOSTNAME="localhost"
 ```
 
 On the root folder of this project run __`python create_db.py`__ to create database for the Api.
