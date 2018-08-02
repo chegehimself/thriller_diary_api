@@ -54,19 +54,19 @@ class TestAuth(unittest.TestCase):
         self.assertEqual(req3.status_code, 401)
         self.assertIn('Invalid username', str(req3.data))
 
+    def test_wrong_password(self):
+        """ test for wrong password """
+        self.user_wrong_password = {"username":"thor", "email":"thor@gmail.com", "password":"verywrong"}
+        req5 = self.client().post(self.login_route, data=self.user_wrong_password)
+        self.assertEqual(req5.status_code, 401)
+        self.assertIn('Oops!', str(req5.data))
+    
     def test_invalid_password(self):
         """ test for invalid password """
         self.user_short_password = {"username":"superman", "email":"superman@gmail.com", "password":"i"}
-        self.user_wrong_password = {"username":"thor", "email":"thor@gmail.com", "password":"verywrong"}
         req4 = self.client().post(self.register_route, data=self.user_short_password)
-        req5 = self.client().post(self.login_route, data=self.user_wrong_password)
-        req7 = self.client().post(self.login_route, data=self.user_short_password)
         self.assertEqual(req4.status_code, 401)
-        self.assertIn('short', str(req4.data))
-        self.assertEqual(req5.status_code, 401)
-        self.assertIn('Oops!', str(req5.data))
-        self.assertEqual(req7.status_code, 401)
-        self.assertIn('short password', str(req7.data))
+        self.assertIn('short password', str(req4.data))
 
     def test_empty_data(self):
         """ test for empty data submission """
