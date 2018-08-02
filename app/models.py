@@ -77,7 +77,7 @@ class Entry(object):
             self.db.commit()
             response = {
                 "status": "success",
-                "entry": {"Message":"Updated successfully"}}
+                "Updated":{"id":id_entry,"title":entries_user[0][1], "description": entries_user[0][3]}}
             return response, 201
 
     def delete_entry(self, current_user, id_entry):
@@ -93,7 +93,7 @@ class Entry(object):
         self.db.commit()
         response = {
             "status":"success",
-            "Deleted":{"id":id_entry}
+            "Deleted":{"id":id_entry,"title":entries_user[0][1], "description": entries_user[0][3]}
         }
         return response, 200
 
