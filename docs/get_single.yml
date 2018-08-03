@@ -14,8 +14,6 @@ This route fetches specified entry
     responses:
       500:
         description: Error There was a server error!
-      200:
-        description: Entry has been updated successfully
       401:
         description: wrong parameters were provided
       403:
