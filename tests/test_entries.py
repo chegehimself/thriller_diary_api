@@ -36,7 +36,7 @@ class TestDiaryEntry(unittest.TestCase):
 
     def tearDown(self):
         '''Clears the database'''
-        cur = db.cursor() 
+        cur = db.cursor()
         cur.execute('DELETE FROM "users";')
         cur.execute('DELETE FROM "entries";')
         db.commit()
@@ -110,17 +110,30 @@ class TestDiaryEntry(unittest.TestCase):
         self.register_user()
         result = self.login_user()
         access_token = json.loads(result.data.decode())['token']
-        # bind the app to the current context
-        with self.app.app_context():
-            req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token})
-            req2 = self.client().post(self.entry_route, data=self.entry_bad_title, headers={"access-token":access_token})
-            req3 = self.client().post(self.entry_route, data=self.entry_no_description, headers={"access-token":access_token})
-            req4 = self.client().post(self.entry_route, data=self.entry_no_title, headers={"access-token":access_token})
-            self.assertEqual(req2.status_code, 401)
-            self.assertEqual(req3.status_code, 401)
-            self.assertEqual(req4.status_code, 401)
-            self.assertEqual(req.status_code, 201)
-            self.assertIn('At Russia', str(req.data))
+        req = self.client().post(self.entry_route, data=self.entry, headers={"access-token":access_token})
+        self.assertEqual(req.status_code, 201)
+        self.assertIn('At Russia', str(req.data))
+    def test_entry_creation_no_tittle(self):
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        req4 = self.client().post(self.entry_route, data=self.entry_no_title, headers={"access-token":access_token})
+        self.assertEqual(req4.status_code, 401)
+
+    def test_entry_creation_no_description(self):
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        req3 = self.client().post(self.entry_route, data=self.entry_no_description, headers={"access-token":access_token})
+        self.assertEqual(req3.status_code, 401)
+
+    def test_entry_creation_with_bad_title(self):
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['token']
+        req2 = self.client().post(self.entry_route, data=self.entry_bad_title, headers={"access-token":access_token})
+        self.assertEqual(req2.status_code, 401)
+
     def test_for_unavailable_id_fetch(self):
         """ test for fetch of an unavailable id """
         self.register_user()

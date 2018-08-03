@@ -27,7 +27,7 @@ class TestAuth(unittest.TestCase):
     def test_registration_conflict(self):
         """ test registration conflict """
         req = self.client().post(self.register_route, data=self.user) # pylint: disable=unused-variable
-        req1 = self.client().post(self.register_route, data=self.user) # pylint: disable=unused-variable
+        req1 = self.client().post(self.register_route, data=self.user)
         self.assertEqual(req1.status_code, 409)
         self.assertIn('exists', str(req1.data))
         
@@ -44,7 +44,7 @@ class TestAuth(unittest.TestCase):
         self.register = {"username":"thor", "password":"thor", "email":"thor@gmail.com"}
         req = self.client().post(self.register_route, data=self.register) # pylint: disable=unused-variable
         self.user_data = {"email":"thor@gmail.com", "password":"thor"}
-        req = self.client().post(self.login_route, data=self.user_data) # pylint: disable=unused-variable
+        req = self.client().post(self.login_route, data=self.user_data)
         self.assertEqual(req.status_code, 200)
         self.assertIn('token', str(req.data))
 
@@ -66,7 +66,7 @@ class TestAuth(unittest.TestCase):
         """ test for wrong password """
         self.user_wrong_password = {"username":"spinderman", "email":"spinderman@gmail.com", "password":"verywrong"}
         self.register = {"username":"spinderman", "password":"spinderman", "email":"spinderman@gmail.com"}
-        req3 = self.client().post(self.register_route, data=self.register)
+        req3 = self.client().post(self.register_route, data=self.register) # pylint: disable=unused-variable
         req5 = self.client().post(self.login_route, data=self.user_wrong_password)
         self.assertEqual(req5.status_code, 401)
         self.assertIn('Oops!', str(req5.data))
