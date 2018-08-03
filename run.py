@@ -21,7 +21,7 @@ Swagger(app, template={
            "TokenHeader": {
                "type": "apiKey",
                "name": "access-token",
-               "in": "header"          
+               "in": "header"
            }
        }
    })
