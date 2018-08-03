@@ -34,11 +34,12 @@ class TestDiaryEntry(unittest.TestCase):
         self.bad_url = '/api/v1/entries/not_available'
         self.single_entry_route1 = 'api/v1/entries/84'
 
-        with self.app.app_context():
-            cur = db.cursor()
-            cur.execute('DELETE FROM "users";')
-            cur.execute('DELETE FROM "entries";')
-            db.commit()
+    def tearDown(self):
+        '''Clears the database'''
+        cur = db.cursor() 
+        cur.execute('DELETE FROM "users";')
+        cur.execute('DELETE FROM "entries";')
+        db.commit()
 
     # login user
     def register_user(self, username="thor", email="thor@gmail.com", password="thor"):

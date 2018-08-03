@@ -138,8 +138,6 @@ class User(object):
         checker = self.db.cursor()
         checker.execute("SELECT username, email FROM users")
         for user in checker.fetchall():
-            # if username == user[0]:
-            #     return {"status": "fail", "message" : "user exists"}, 409
             if user_email == user[1]:
                 return {"status": "fail", "message" : "user exists"}, 409
 

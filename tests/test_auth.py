@@ -17,6 +17,12 @@ class TestAuth(unittest.TestCase):
         self.user = {"username":"superman", "email":"superman@gmail.com", "password":"69mansuper"}
         self.register_route = 'api/v1/auth/signup'
         self.login_route = 'api/v1/auth/login'
+    def tearDown(self):
+        '''Clears the database'''
+        cur = db.cursor()
+        cur.execute('DELETE FROM "users";')
+        cur.execute('DELETE FROM "entries";')
+        db.commit()
 
     def test_registration_conflict(self):
         """ test registration conflict """
@@ -58,7 +64,9 @@ class TestAuth(unittest.TestCase):
 
     def test_wrong_password(self):
         """ test for wrong password """
-        self.user_wrong_password = {"username":"thor", "email":"thor@gmail.com", "password":"verywrong"}
+        self.user_wrong_password = {"username":"spinderman", "email":"spinderman@gmail.com", "password":"verywrong"}
+        self.register = {"username":"spinderman", "password":"spinderman", "email":"spinderman@gmail.com"}
+        req3 = self.client().post(self.register_route, data=self.register)
         req5 = self.client().post(self.login_route, data=self.user_wrong_password)
         self.assertEqual(req5.status_code, 401)
         self.assertIn('Oops!', str(req5.data))
