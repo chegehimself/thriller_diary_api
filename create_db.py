@@ -1,12 +1,12 @@
 import psycopg2
 import os
-HOSTNAME = 'localhost'
-USERNAME = 'postgres'
+HOSTNAME = os.getenv('HOSTNAME')
+USERNAME = os.getenv('USERNAME')
 PASSWORD = os.getenv('PASSWORD')
 DATABASE = os.getenv('DATABASE')
 db = psycopg2.connect( host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE, port=5432)
 cur = db.cursor()
-cur.execute("""CREATE TABLE kim ( 
+cur.execute("""CREATE TABLE users ( 
     ID serial PRIMARY KEY,
     username VARCHAR (255) NOT NULL,
     email VARCHAR (255) NOT NULL,
