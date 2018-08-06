@@ -4,10 +4,6 @@ This route modifies an new entry
     tags:
       - Routes
     parameters:
-      - in: header
-        name: access-token
-        required: true
-        type: string
       - in: path
         name: id_entry
         required: true
@@ -28,10 +24,12 @@ This route modifies an new entry
             description:
               type: string
               example: Me and my dad decide to spend our saturday...
+    security:
+      - TokenHeader: []
     responses:
       500:
         description: Error There was a server error!
-      201:
+      200:
         description: Entry has been updated
       403:
         description: Method is not allowed

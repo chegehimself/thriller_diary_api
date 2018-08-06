@@ -29,7 +29,7 @@ __Set environment variable__
 * make sure you have [__postgresql__](https://www.postgresql.org/download/linux/ubuntu/) installed and running properly.
 
 * run the following command to create the database:
-* 
+
 ```sql
 - psql -U postgres
 
@@ -41,6 +41,9 @@ __Set environment variable__
 ```
 export DATABASE="thriller"
 export PASSWORD="your postgres user password"
+export DATABASE="thriller"
+export USERNAME="postgres"
+export HOSTNAME="localhost"
 ```
 
 On the root folder of this project run __`python create_db.py`__ to create database for the Api.
@@ -75,7 +78,8 @@ The following is a list of available endpoints in this application
 * __Creating database for testing__
 To create database for testing, run __`python create_test_db.py`__.
 
-`py.test --cov=app`
-
 * change the database name to tests
 `export DATABASE="tests"`
+
+* Finaly run the tests
+`py.test --cov=app`

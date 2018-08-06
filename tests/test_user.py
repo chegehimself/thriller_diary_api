@@ -23,11 +23,12 @@ class TestDiaryEntry(unittest.TestCase):
         self.users_route = '/api/v1/users/profile'
         self.correct_credentials = {'old_password':'thor', 'new_passowrd':'jumanji', "confirmation":"jumanji" }
 
-        with self.app.app_context():
-            cur = db.cursor()
-            cur.execute('DELETE FROM "users";')
-            cur.execute('DELETE FROM "entries";')
-            db.commit()
+    def tearDown(self):
+        '''Clears the database'''
+        cur = db.cursor()
+        cur.execute('DELETE FROM "users";')
+        cur.execute('DELETE FROM "entries";')
+        db.commit()
 
     # login user
     def register_user(self, username="thor", email="thor@gmail.com", password="thor"):
